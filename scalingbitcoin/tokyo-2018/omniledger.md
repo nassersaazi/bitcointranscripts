@@ -1,16 +1,9 @@
 ---
-title: Omniledger
+title: 'OmniLedger: A Secure, Scale-Out, Decentralized Ledger via Sharding'
 transcript_by: Bryan Bishop
-categories: ['conference']
-speakers: ['Eleftherios Kokoris-Kogias']
+speakers:
+  - Eleftherios Kokoris-Kogias
 ---
-
-Omniledger: A secure, scale-out, decentralized ledger via sharding
-
-Eleftherios Kokoris-Kogias, Philipp Jovanovic, Linus Gasser, Nicolas Gailly, Ewa Syta and Bryan Ford (Ecole Polytechnique Fédérale de Lausanne)
-
-(LefKok)
-
 paper: <https://eprint.iacr.org/2017/406.pdf>
 
 <https://twitter.com/kanzure/status/1048733316839432192>
@@ -49,7 +42,7 @@ First we used sharding via distributed randomness, we have multiple partitions, 
 
 # Shard validator assignment
 
-We use two randomness protocols. One needs a trusted leader. See "Scalable bias-resistant distributed randomness" 2017. RandHound is a multi-party computation protocol. The basic idea is that given a leader, we can produce a fully-unbiasable unpredictable random number. The only thing the leader can do is isolate node participant. If the leader is honest, then the random numbers it produces are absolutely provably unbiasable. 
+We use two randomness protocols. One needs a trusted leader. See "Scalable bias-resistant distributed randomness" 2017. RandHound is a multi-party computation protocol. The basic idea is that given a leader, we can produce a fully-unbiasable unpredictable random number. The only thing the leader can do is isolate node participant. If the leader is honest, then the random numbers it produces are absolutely provably unbiasable.
 
 # Atomix: atomic cross-shard transactions
 

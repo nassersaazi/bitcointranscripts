@@ -1,13 +1,13 @@
 ---
-title: Zerocash And Zero Knowledge Succint Arguments Of Knowledge Libsnark
+title: 'Zerocash: Zero knowledge proofs and SNARKs and libsnark'
 transcript_by: Bryan Bishop
-categories: ['conference']
-tags: ['consensus', 'privacy']
-speakers: ['Madars Virza']
+tags:
+  - proof-systems
+speakers:
+  - Madars Virza
+date: 2015-03-08
+media: https://www.youtube.com/watch?v=96ULlHhia_Q&t=15308
 ---
-
-Zero knowledge proofs and SNARKs and libsnark
-
 I am going to tell you about zerocash and our approach of addressing Bitcoin's privacy problem. All of this is joint work with Techion, ETCH Zurich, and MIT, and Matt Green, .. and .. and..
 
 So first to get us going, I want to talk a little bit about two of my ideas around Bitcoin. There are two questions that every decentralized cryptocurrency must answer. First of them is where does the money come from. The second question is, if money is digital, if I have my digital $1 bill, can I copy it? What prevents it from double spending?
@@ -46,7 +46,7 @@ All of those properties when taken together are actually impossible. So we relax
 
 Having identified what we want, can we get it? In a beautiful line of early work by Killian92 and Mical92, Mical00, they are efficient enough to be implemented.
 
-PGHR13, BCGTV13, BCTV14b, KPPSST14, ZPK14, CFHKPKNPZ14, BCTV14, 
+PGHR13, BCGTV13, BCTV14b, KPPSST14, ZPK14, CFHKPKNPZ14, BCTV14,
 
 We chose one of those systems, libsnark, that we believe is best. Our implementation we chose is fast. It's also very versatile. It supports low-level concepts like circuits and high-level concepts like random access machines. It is MIT licensed.
 

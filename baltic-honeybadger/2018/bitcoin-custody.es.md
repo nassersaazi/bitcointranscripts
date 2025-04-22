@@ -1,13 +1,13 @@
 ---
-title: Custodia de Bitcoin 
+title: Custodia de Bitcoin
 transcript_by: Bryan Bishop
 translation_by: Blue Moon
-categories: ['conference']
-speakers: ['Bryan Bishop']
-tags: ['custodia', 'reglamento']
+speakers:
+  - Bryan Bishop
+tags:
+  - regulation
 media: https://www.youtube.com/watch?v=D2WXxgZ8h-0&t=22160s
 ---
-
 <https://twitter.com/kanzure/status/1048014038179823617>
 
 Custodia de Bitcoin

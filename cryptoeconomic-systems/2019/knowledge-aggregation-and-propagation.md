@@ -1,12 +1,13 @@
 ---
 title: Knowledge Aggregation And Propagation
 transcript_by: Bryan Bishop
-categories: ['conference']
-tags: ['academia', 'research', 'bitcoin core']
-speakers: ['Bryan Bishop']
+tags:
+  - research
+  - bitcoin-core
+speakers:
+  - Bryan Bishop
 date: 2019-10-06
 ---
-
 Intro
 =====
 
@@ -22,7 +23,7 @@ mechanism by which you judge the quality of research; *your reputation
 is worthless to me*. (laughter)
 
 *My perspective*: \[first, slidemaker's [*regret! might have reorganized
-this\]*]()  
+this\]*]()
 [*I'm a bitcoin core developer. Also*]() worked at LedgerX (4 years). I
 also work on biotech on the hobbyist side, garage engineering -- what I
 was doing when bitcoin was launched. This is a community that recognized
@@ -50,7 +51,7 @@ I’ve experimented with this: If I wait a day or two about transcripts,
 no one cares. They like having them **immediately**. *Example conference
 coverage*:
 
-  
+
 
 There are many arcane topics only talked about at these confs, you could
 only learn them by attending. And people might not realize they want to

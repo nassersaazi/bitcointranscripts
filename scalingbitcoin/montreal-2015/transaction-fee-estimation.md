@@ -1,13 +1,13 @@
 ---
-title: Transaction Fee Estimation
+title: How Wallets Can Handle Real Transaction Fees
 transcript_by: Bryan Bishop
-categories: ['conference']
-tags: ['wallet', 'fees']
-speakers: ['Bram Cohen']
+tags:
+  - fee-management
+speakers:
+  - Bram Cohen
+date: 2015-09-12
+media: https://www.youtube.com/watch?v=iKDC2DpzNbw&t=770s
 ---
-
-How wallets can handle real transaction fees
-
 You should have a market at this point, where some number of transactions never happen because they aren't willing to pay a fee. So you get some equilibrium of price going on. I proactively want to see this happen because we don't know what fees should be until we run the experiment and see what prices end up being. For this to happen, wallets have to do price setting in some way. For the most part they presently don't. I am going to talk about how they can be made to do that.
 
 First some groundrules, I am only talking about consumer wallets. There are other actors in the ecosystem that might want to handle fees in various ways. Also there's no microchannels, microchannels should be supported eventually but I'm dealing with the simpler case where a wallet is trying to make payments. Also I am assuming that replace-by-fee is in effect. This whole thing doesn't work without replace-by-fee. The way that you need to do payments is pretty broken unless you can replace-by-fee. You need aggressive replace-by-fee. Also you need an anti-dos mechanism, where you don't have an increase-by-epsilon every single time. They must increase it by a certain minimum amount to prevent denial-of-service on the whole network. The conclusion I come to here is that the replacement shouldn't be based on the amount that goes up, but rather that you have a policy that transactions can only be replaced once per block, it should only be after a transaction has been failed to go into a block that you should allow it to be replaced.
@@ -20,7 +20,7 @@ Currently in bitcoin there's no way to make it for a transaction to not happen a
 
 There's a question of what do you actually do- what should wallets do? They can look at what recent transaction fees have been, they can look at recent fees, they can look at mempool data, how long they have been going on current payment attempts. There are some problems with these inputs. What fees were paid in the past is problematic. If you do something where you look at what fees were paid in the past, you can get these crazy spirals where you have peers paying way way more than they need to just off of tradition and what transaction fees were in the previous blocks. This creates miner incentives to exaggerage the transaction price in one mining block because that might force prices up and force them up and keep them there persistently much longer than they would have been to begin with. Using stuff in the mempool requires that SPV clients ask full nodes what's in your mempool, which is trivial pumpable by miners.
 
-You start with either a completely small value like 1 satoshi if you have never sent payments before; you can take the last payment amount times something, as your starting value. I then did some math here. You exponentially increase this up to the maximum that you're willing to spend at the end of the amount of time that you're willing to go, which I assume you're measuring blocks. I assume it's measured in blocks. 
+You start with either a completely small value like 1 satoshi if you have never sent payments before; you can take the last payment amount times something, as your starting value. I then did some math here. You exponentially increase this up to the maximum that you're willing to spend at the end of the amount of time that you're willing to go, which I assume you're measuring blocks. I assume it's measured in blocks.
 
 M = max fee
 
@@ -35,11 +35,7 @@ That's basically my answer to what should be done, it's conservative, it's easil
 
 That's the basics of how I think wallets should handle transaction fees.
 
-categories: ['conference']
-tags: ['wallet', 'fees']
----
-
-<http://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-November/011685.html>
+<https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-November/011685.html>
 
 <https://medium.com/@bramcohen/how-wallets-can-handle-transaction-fees-ff5d020d14fb>
 

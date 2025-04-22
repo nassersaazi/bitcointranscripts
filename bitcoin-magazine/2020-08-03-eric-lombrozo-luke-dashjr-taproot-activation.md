@@ -1,22 +1,22 @@
 ---
-title: Taproot Activation
+title: How to Activate a New Soft Fork
 transcript_by: Michael Folkson
-categories: ['podcast']
-tags: ['taproot', 'soft fork']
-speakers: ['Eric Lombrozo', 'Luke Dashjr']
+tags:
+  - taproot
+  - soft-fork-activation
+speakers:
+  - Eric Lombrozo
+  - Luke Dashjr
 date: 2020-08-03
 media: https://www.youtube.com/watch?v=yQZb0RDyFCQ
 ---
-
-Topic: How to Activate a New Soft Fork
-
 Location: Bitcoin Magazine (online)
 
 Aaron van Wirdum in Bitcoin Magazine on BIP 8, BIP 9 or Modern Soft Fork Activation: https://bitcoinmagazine.com/articles/bip-8-bip-9-or-modern-soft-fork-activation-how-bitcoin-could-upgrade-next
 
 David Harding on Taproot activation proposals: https://gist.github.com/harding/dda66f5fd00611c0890bdfa70e28152d
 
-# Intro
+## Intro
 
 Aaron van Wirdum (AvW): Eric, Luke welcome. Happy Bitcoin Independence Day. How are you doing?
 
@@ -26,17 +26,17 @@ AvW: I am doing fine thanks. Luke how are you?
 
 Luke Dashjr (LD): OK. How are you?
 
-AvW: Good thanks. It is cool to have you guys on Bitcoin Independence Day. Obviously both of you played a big role in the UASF movement. You were maybe two of the most prominent and influential supporters. This Bitcoin Independence Day, this August 1st thing from a couple of years ago, this was about SegWit activation, soft fork activation. This is getting relevant again because we are looking at a new soft fork that might be coming up, Taproot. Just in general the conversation of how to activate soft forks is getting started again. So what happened a couple of years ago is becoming relevant again. 
+AvW: Good thanks. It is cool to have you guys on Bitcoin Independence Day. Obviously both of you played a big role in the UASF movement. You were maybe two of the most prominent and influential supporters. This Bitcoin Independence Day, this August 1st thing from a couple of years ago, this was about SegWit activation, soft fork activation. This is getting relevant again because we are looking at a new soft fork that might be coming up, Taproot. Just in general the conversation of how to activate soft forks is getting started again. So what happened a couple of years ago is becoming relevant again.
 
 EL: We don’t want to repeat what happened a few years ago. We want to do it better this time.
 
-# Previous soft fork activations
+## Previous soft fork activations
 
 AvW: That’s what I want to discuss with you guys and why it is great to have you on. Let’s start with that Eric. A couple years ago, apparently something went wrong. Shall we first very briefly mention there was this process called [BIP 9](https://github.com/bitcoin/bips/blob/master/bip-0009.mediawiki). Do you want to explain very briefly what that was and then you can get into why that was a problem or what went wrong?
 
 EL: The [first soft forks](https://blog.bitmex.com/bitcoin-softfork-activation-methodology/) that were activated were with a flag date, just written into the code. Later on to make the transition more smooth miner signaling was incorporated. Then BIP 9 was this proposal that allowed several soft forks to be under activation at the same time with the idea that there would be extensibility to the protocol and there would be this whole process that we could use to add new features. But it turned out to be very messy and I am not sure that that process is sustainable.
 
-AvW: To be clear the idea with BIP 9 was there is this soft fork, there is a change to the protocol, and the challenge then is to get the network upgraded to that change without splitting the network between upgraded and non-upgraded nodes. The idea was we’ll let activation coordination depend on hashpower. Once enough miners have signaled that they have upgraded the network recognizes this, all upgraded nodes recognize this and they start enforcing the new rules. The reason that is a good idea is because if most miners do this there is no risk of chain splits. Even unupgraded nodes will follow the “upgraded” version of the blockchain. 
+AvW: To be clear the idea with BIP 9 was there is this soft fork, there is a change to the protocol, and the challenge then is to get the network upgraded to that change without splitting the network between upgraded and non-upgraded nodes. The idea was we’ll let activation coordination depend on hashpower. Once enough miners have signaled that they have upgraded the network recognizes this, all upgraded nodes recognize this and they start enforcing the new rules. The reason that is a good idea is because if most miners do this there is no risk of chain splits. Even unupgraded nodes will follow the “upgraded” version of the blockchain.
 
 EL: It would be the longest chain. By default all the other clients would follow that chain automatically.
 
@@ -50,9 +50,9 @@ EL: Yes. It had a 95 percent threshold which was something that was actually pre
 
 AvW: Luke do you agree with this analysis? Is this how you see it?
 
-LD: More or less yeah. 
+LD: More or less yeah.
 
-# SegWit and BIP 148
+## SegWit and BIP 148
 
 AvW: At some point there was this solution to break the deadlock which was a UASF. This ultimately took shape in the form of [BIP 148](https://github.com/bitcoin/bips/blob/master/bip-0148.mediawiki). Luke I think you were involved with the early process of deciding this. What was the idea behind BIP 148?
 
@@ -60,7 +60,7 @@ LD: I wasn’t really involved that early. I was actually opposed to it original
 
 AvW: Why?
 
-LD: I didn’t really analyze the implications fully. 
+LD: I didn’t really analyze the implications fully.
 
 AvW: Can you explain what BIP 148 did and why it was designed the way it was designed?
 
@@ -68,7 +68,7 @@ LD: It essentially took the decision back from the miners. “August 1st we are 
 
 AvW: I think the specific way it did that was BIP 148 nodes would start rejecting blocks that didn’t actually signal support for SegWit. Is that right?
 
-LD: Yes. That is how most user activated soft forks previously had been deployed. If the miners didn’t signal the new version their blocks would be invalid. 
+LD: Yes. That is how most user activated soft forks previously had been deployed. If the miners didn’t signal the new version their blocks would be invalid.
 
 AvW: There is a nuanced difference between actually activating SegWit itself and enforcing SegWit or enforcing signaling for SegWit right?
 
@@ -92,7 +92,7 @@ LD: Ironically one of the earliest BIP 148 supporters was BitPay who were actual
 
 AvW: Were they?
 
-LD: I think they lost relevance soon after then. But back then they were more of a big deal. 
+LD: I think they lost relevance soon after then. But back then they were more of a big deal.
 
 AvW: You mentioned this do or die situation, what are the risks of die? What could go wrong with something like BIP 148?
 
@@ -100,7 +100,7 @@ EL: At this point we were pretty sure that if people wanted to fork they were go
 
 AvW: To be clear about that BIP 1	48 could have also led to a chain split and possibly re-orged. It was a risk in that sense.
 
-EL: Sure we were in unchartered territory. I think the theory was pretty sound but there is always a risk. I think at this point the fact that there was a risk actually was part of the motivation for people to want to run BIP 148 because the more people that did that the lower the risk would be. 
+EL: Sure we were in unchartered territory. I think the theory was pretty sound but there is always a risk. I think at this point the fact that there was a risk actually was part of the motivation for people to want to run BIP 148 because the more people that did that the lower the risk would be.
 
 AvW: That was an interesting game theoretic advantage that this BIP had. There is disagreement about this to this day, what do you guys think BIP 148 actually did? Some people said it did nothing in the end. Miners were just the ones who upgraded the protocol. How do you see this?
 
@@ -108,7 +108,7 @@ LD: It was very clearly BIP 148 that got SegWit activated. If it hadn’t been i
 
 AvW: Eric do you agree with that?
 
-EL: I think BIP 148 played a huge role but I think there were a lot of factors that were very important. For instance the fact that SegWit2x was going on and the whole New York agreement was going on. I think that rallied people to want to support a user activated soft fork even more. It is kind of ironic. Had the whole SegWit2x thing not been happening people might have been more complacent and said “Let’s hold off a little bit and wait and see what happens.” I think this pressured everyone to take action. It seemed like there was an imminent threat so people needed to do something. That was the moment I think the game theory really started to work out because then it would be possible to cross that threshold where it is do or die, the point of no return. 
+EL: I think BIP 148 played a huge role but I think there were a lot of factors that were very important. For instance the fact that SegWit2x was going on and the whole New York agreement was going on. I think that rallied people to want to support a user activated soft fork even more. It is kind of ironic. Had the whole SegWit2x thing not been happening people might have been more complacent and said “Let’s hold off a little bit and wait and see what happens.” I think this pressured everyone to take action. It seemed like there was an imminent threat so people needed to do something. That was the moment I think the game theory really started to work out because then it would be possible to cross that threshold where it is do or die, the point of no return.
 
 AvW: Let me rephrase the question a little bit. Do you guys think SegWit would’ve been activated if BIP 148 hadn’t happened? Would we have SegWit today?
 
@@ -120,7 +120,7 @@ AvW: One last question. To sum up this part of Bitcoin history, what were the le
 
 EL: I think it is very important that we try to avoid politicizing this kind of stuff. Ideally we don’t want the protocol base layer to be changing very much. Anytime there is a change to that it introduces an attack vector. Right away people could try to insert vulnerabilities or exploits or try to split the community or create social engineering attacks or stuff like that. Anytime you open the door to changing the rules you are opening yourself up to attacks. We are at a point now where it is impossible to upgrade the protocol without having some kind of process. But the more we try to scale this the more that it tends to become political. I am hoping that Taproot does not create the same kind of contention and it does not become politicized. I don’t think it is a good precedent to set that these things are controversial. At the same time I don’t want this to be a regular process. I don’t want to make a habit out of activating soft forks all the time. I do think Taproot is a very important addition to Bitcoin and it seems to have a lot of community support. It would be really nice to include it now. I think if we wait it is going to get harder to activate it later.
 
-# BIP 8 as a possible improvement to BIP 9
+## BIP 8 as a possible improvement to BIP 9
 
 AvW: You mentioned that 2017 was this period of controversy, the scaling civil war, whatever you want to call it. Was there really a problem with BIP 9 or was it just a controversial time and by now BIP 9 would be fine again?
 
@@ -132,11 +132,11 @@ AvW: What you are saying is that even in a period where there is no civil war go
 
 EL: Possibly yes.
 
-LD: Because now the miners can hold the soft fork hostage that has presumably already been agreed on by the community. If it hasn’t been agreed on by the community we shouldn’t be deploying it with any activation, period. 
+LD: Because now the miners can hold the soft fork hostage that has presumably already been agreed on by the community. If it hasn’t been agreed on by the community we shouldn’t be deploying it with any activation, period.
 
 AvW: Luke you have been working on [BIP 8](https://github.com/bitcoin/bips/blob/master/bip-0008.mediawiki) which is an alternative way to activate soft forks. Can you explain what BIP 8 is?
 
-LD: Rather than an alternative I look at it more of taking BIP 9 and fixing the bugs in it. 
+LD: Rather than an alternative I look at it more of taking BIP 9 and fixing the bugs in it.
 
 AvW: How are the bugs fixed? What does BIP 8 do?
 
@@ -148,7 +148,7 @@ LD: If blocks mine too slow then the timeout would occur before the difficulty p
 
 AvW: Is it the case with BIP 8 that it is configurable? You can force signaling at the end or not. How does this work exactly?
 
-LD: That was a more recent change now that we have got the activation topic back going again. It is designed so that you could deploy it with an activation that does timeout and abort and then later on change that flag to a UASF. If the UASF is set later, as long as it has sufficient community support to do the UASF, all the nodes that were configured without the UASF will still go along with it. 
+LD: That was a more recent change now that we have got the activation topic back going again. It is designed so that you could deploy it with an activation that does timeout and abort and then later on change that flag to a UASF. If the UASF is set later, as long as it has sufficient community support to do the UASF, all the nodes that were configured without the UASF will still go along with it.
 
 AvW: Who sets this flag? Is it embedded in a software release or is it something users can manually do? Or is it something you compile?
 
@@ -190,7 +190,7 @@ EL: It sets a really bad precedent because Bitcoin Core has become the reference
 
 AvW: Or Bitcoin Core developers could be coerced or get phone calls from three letter agencies.
 
-LD: Especially if there is a precedent or even an appearance of this supposed power. It is going to cause people who are malicious think they can pressure developers and attempt to do that even if it doesn’t work out. 
+LD: Especially if there is a precedent or even an appearance of this supposed power. It is going to cause people who are malicious think they can pressure developers and attempt to do that even if it doesn’t work out.
 
 AvW: The obvious downside is that if not enough people upgrade to this alternative client in this case it could partition the network. It could split the network, it could cause the chaos that we discussed before with chain re-orgs. Is this not a risk you are a concerned about?
 
@@ -206,7 +206,7 @@ LD: The community would have to decide on that. It is not something that any one
 
 EL: At that point we are in unchartered territory in a lot of ways. We have to see if the incentives align for enough people to really want to get behind one particular version of Bitcoin or not. If there is a significant risk that it could split the network permanently in a way that does not lead to a decisive outcome then I would not support it. I think it is important that there is a theoretical high probability that the network will tend to converge. The strong economic nodes will tend to converge on one particular blockchain.
 
-LD: Also keep in mind it is not enough to simply not upgrade with something like this. It would have to explicitly lock in a block that rejects Taproot. Otherwise there would be a risk of the Taproot chain overtaking their chain and replacing it. 
+LD: Also keep in mind it is not enough to simply not upgrade with something like this. It would have to explicitly lock in a block that rejects Taproot. Otherwise there would be a risk of the Taproot chain overtaking their chain and replacing it.
 
 AvW: What kind of timeline would you think in this regard? Luke I think I have seen you mention a year? Is that right?
 
@@ -222,9 +222,9 @@ LD: I don’t know if there is an incentive to try to veto when it is just going
 
 EL: Yeah.
 
-# Modern Soft Fork Activation
+## Modern Soft Fork Activation
 
-AvW: The other perspective in this debate would be for example Matt Corallo’s [Modern Soft Fork Activation](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-January/017547.html). I assume that you are aware of that. I will explain it real quick myself. Modern Soft Fork Activation, the idea is that basically you use the old fashioned BIP 9 upgrade process for a year. Let miners activate it for a year. If it doesn’t work then developers will reconsider for 6 months, see if there was a problem with Taproot in this case after all, something that they had missed, some concern miners had with it. Review it for 6 months, if after the 6 months it is found there was no actual problem and miners were delaying for whatever reason then activation is redeployed with a hard deadline activation at 2 years. What do you think of this?
+AvW: The other perspective in this debate would be for example Matt Corallo’s [Modern Soft Fork Activation](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-January/017547.html). I assume that you are aware of that. I will explain it real quick myself. Modern Soft Fork Activation, the idea is that basically you use the old fashioned BIP 9 upgrade process for a year. Let miners activate it for a year. If it doesn’t work then developers will reconsider for 6 months, see if there was a problem with Taproot in this case after all, something that they had missed, some concern miners had with it. Review it for 6 months, if after the 6 months it is found there was no actual problem and miners were delaying for whatever reason then activation is redeployed with a hard deadline activation at 2 years. What do you think of this?
 
 LD: If there is possibly a problem we shouldn’t even get to that first step.
 
@@ -240,11 +240,11 @@ AvW: There are variations. There are different ways of thinking about this. The 
 
 EL: I think for the testing and review of the actual Taproot proposal for sure it should have enough time. We should not rush that. We should not try to deploy anything until the developers that are working on it and are reviewing and testing it are confident that it is at a level where it is safe to deploy, independent of all the activation stuff. I think that the activation though should be quick. I don’t think it will take that long to bring people onboard. We are talking probably a few months at most to get everyone onboard if it is going to happen. If it is taking longer than that then chances are it doesn’t have enough support. We probably shouldn’t be doing it in the first place. If people can’t do it that quickly then I think the whole process is questionable. The more variables that we add to the process later the more it invites controversy and the more that people might just get more confused and think it is more uncertain. With this kind of stuff I think people are looking for decisiveness and looking for resolution. Keeping this uncertain and on hold for a very long period of time is not healthy for the network. The activation part I think should be quick. The deployment should take as long as is necessary to make sure the code actually is good. We should not be deploying code that has not been fully tested and reviewed. But once we decide that “Yes this is what should be done” then I think at that point it should be quick. Otherwise we shouldn’t do it at all.
 
-LD: The decision of course being made by the community. I agree with Eric. 
+LD: The decision of course being made by the community. I agree with Eric.
 
 AvW: Another argument in favor of Matt’s perspective here is that the code should be good before you deploy it but maybe in reality in the real world a lot of people will only really start looking at the code, will only really start looking at the upgrade once it is actually out there. Once there is a software release that includes it. By not immediately enforcing the activation this allows realistically more time for review. What do you think?
 
-LD: I think if people have something to review they should review it before it gets to that point, before there is any activation set. Ideally before it gets merged. 
+LD: I think if people have something to review they should review it before it gets to that point, before there is any activation set. Ideally before it gets merged.
 
 AvW: Eric do you see any merit in this argument?
 
@@ -252,11 +252,11 @@ EL: For sure the more eyes that look at it the better but I think nothing would 
 
 LD: At that point if there was an issue found there is going to be a question of “Is it worth redoing all this just to fix that issue or should we just go ahead anyway?” If the issue is bad enough miners could activate simply because of the issue because they want to take advantage of it. We don’t want it to activate if there is a big issue. We need to be completely sure there are no issues before we get to the activation stage.
 
-# BIP 8 with forced signaling
+## BIP 8 with forced signaling
 
 AvW: Let me throw out another idea that has been circulating. What if we do a BIP 8 with forced signaling towards the end but give it a long time? After a while you can always speed it up with a new client that includes something forcing miners to signal sooner.
 
-LD: With the current BIP 8 you can’t do that but Anthony Towns has a [pull request](https://github.com/bitcoin/bips/pull/950) that will hopefully fix that. 
+LD: With the current BIP 8 you can’t do that but Anthony Towns has a [pull request](https://github.com/bitcoin/bips/pull/950) that will hopefully fix that.
 
 AvW: Do you see merit in this?
 
@@ -270,11 +270,11 @@ AvW: I could throw another idea out there but I expect your answer will be the s
 
 EL: Yeah.
 
-# Protocol ossification
+## Protocol ossification
 
 AvW: Last question I think. A lot of people out there like protocol ossification. They like it if Bitcoin, at least some point in the future, proves unable to upgrade.
 
-EL: I would like that. 
+EL: I would like that.
 
 AvW: Why would you like that?
 
@@ -282,7 +282,7 @@ EL: Because that removes the politics out of the protocol. As long as you can ch
 
 AvW: I think Nick Szabo has described it as social scalability. That is what you are referring to. You think ossification would benefit social scalability.
 
-LD: I think in the far future it can be considered but in Bitcoin’s current stage, where it is today, if Bitcoin stops improving that opens the door for altcoins to replace it and Bitcoin eventually just becoming irrelevant. 
+LD: I think in the far future it can be considered but in Bitcoin’s current stage, where it is today, if Bitcoin stops improving that opens the door for altcoins to replace it and Bitcoin eventually just becoming irrelevant.
 
 AvW: You say maybe at some point in the future?
 
@@ -304,23 +304,23 @@ LD: At this point I think it is a given that there will be.
 
 AvW: You started out by mentioning privacy. Isn’t this something you think could ultimately be solved well enough on second layers as the protocol is right now?
 
-EL: Possibly. I am not sure. I don’t think anyone has a complete answer to this unfortunately. 
+EL: Possibly. I am not sure. I don’t think anyone has a complete answer to this unfortunately.
 
-LD: The definition of “good enough” may change as privacy invading technology improves. If the governments, not even governments, anyone gets better at invading everyone’s privacy what we need to protect against that could very well raise the bar. 
+LD: The definition of “good enough” may change as privacy invading technology improves. If the governments, not even governments, anyone gets better at invading everyone’s privacy what we need to protect against that could very well raise the bar.
 
-# Taproot
+## Taproot
 
 AvW: We can discuss Taproot itself a little bit. Is that a good idea? What is great about Taproot? Why do you support it if you support it?
 
 LD: It significantly simplifies what has to happen onchain. Right now we have got all these smart contract capabilities, we have had since 2009, but in most cases you don’t need to have the smart contract if both parties see that it is going to end up a certain way. They can just both sign the single transaction and all the smart contract stuff can be bypassed. That is pretty much the main benefit of Taproot. You can bypass all the smart contract in most cases. Then all the full nodes, they have cheaper verification, very little overhead.
 
-EL: And all the transactions would look the same so nobody would be able to see what the contracts are. All the contracts would run offchain which would be a significant improvement for scalability and privacy. I think it is a win all round. 
+EL: And all the transactions would look the same so nobody would be able to see what the contracts are. All the contracts would run offchain which would be a significant improvement for scalability and privacy. I think it is a win all round.
 
 LD: Instead of everybody running the smart contract it is just participants.
 
 EL: Which is the way it should’ve been in the beginning but I think that it took a while until people realized that that is what the script should be doing. Initially it was thought we could have these scripts that run onchain. This is the way it was done because I don’t think Satoshi thought this completely through. He just wanted to launch something. We have a lot of hindsight now that we didn’t have back then. Now it is obvious that really the blockchain is about authorizing transactions, it is not about processing the conditions of contracts themselves. That can all be done offchain and that can be done very well offchain. In the end the only thing is that the participants need to sign off that it did happen and that’s it. That is all that everyone really cares about. Everyone agreed so what is the big deal? If everyone agrees there is no big issue.
 
-AvW: There doesn’t appear to be any downside to Taproot? Is there any downside to it, have you heard about any concern? I think there was an [email](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-February/017618.html) on the mailing list a while ago with some concerns.
+AvW: There doesn’t appear to be any downside to Taproot? Is there any downside to it, have you heard about any concern? I think there was an [email](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-February/017618.html) on the mailing list a while ago with some concerns.
 
 LD: I can’t think of any. There is no reason not to deploy it at least, I can’t think of any reason not to use it either. It does carry over the bias that SegWit toward bigger blocks but that is something that has to be considered independently. There is no reason to tie the features to the block size.
 
@@ -330,13 +330,13 @@ LD: Yeah but that is independent of Taproot.
 
 AvW: Are there any other soft forks you guys are excited about or that you could see be deployed on Bitcoin in the next couple of years?
 
-LD: There is ANYPREVOUT which was formerly called NOINPUT, I think that is making good progress. There is CHECKTEMPLATEVERIFY which I still haven’t looked too much into but it seems like it has got significant community support building up at least. Once Taproot is deployed there will probably be a bunch of other improvements on top of that. 
+LD: There is ANYPREVOUT which was formerly called NOINPUT, I think that is making good progress. There is CHECKTEMPLATEVERIFY which I still haven’t looked too much into but it seems like it has got significant community support building up at least. Once Taproot is deployed there will probably be a bunch of other improvements on top of that.
 
 EL: After the last soft fork, SegWit activated I was so burnt out by the whole process. This thing was really a more than two year process. 2015 was really when this whole thing kind of started and it didn’t activate until August 1st 2017. That is more than two years of this kind of stuff going on. I don’t know if I have an appetite for a very protracted battle with this at all. I want to see what happens with Taproot first before weighing on other soft forks. Taproot is the one that seems to have the most support right now as far as something that is a no brainer, this would be good to have. I would like to see that first. Once that activates then maybe I will have other ideas of what to do next. Right now I don’t know, it is too early.
 
 AvW: What are your final thoughts on soft fork activation? What do you want to tell our viewers?
 
-EL: I think it is really important that we set a good precedent here. I talked about three different categories of risks. The first risk category is just the technical stuff, making sure the code doesn’t have any bugs and stuff like that. The second one is with the activation methodology and making sure that the network doesn’t split. The third one is with precedent. Inviting potential attacks in the future by people exploiting the process itself. The third part is the one that I think is the least well understood. The first part is the part that is most understood even back in 2015. The second category was the one that the whole SegWit activation showed us a lot of things about although we were discussing BIP 8 and BIP 9. The category 3 risks right now I think are very unknown. That is my biggest concern. I would like to see that there isn’t any kind of precedent established where this kind of stuff could be exploited in the future. It is a really tough line to draw exactly how aggressive we should be with this and whether that sets something up for someone else in the future to do something bad. I think we can only learn by doing it and we have to take risks. We are already in unchartered territory with Bitcoin. Bitcoin is already a risky proposition to begin with. We have to take some risks. They should be calculated risks and we should learn as we go along and correct ourselves as quickly as possible. Other than that I don’t really know exactly what the process will end up looking like. We are learning a lot. Right now the category 3 stuff I think is the key stuff we are going to see if this thing actually happens. That is really important to consider. 
+EL: I think it is really important that we set a good precedent here. I talked about three different categories of risks. The first risk category is just the technical stuff, making sure the code doesn’t have any bugs and stuff like that. The second one is with the activation methodology and making sure that the network doesn’t split. The third one is with precedent. Inviting potential attacks in the future by people exploiting the process itself. The third part is the one that I think is the least well understood. The first part is the part that is most understood even back in 2015. The second category was the one that the whole SegWit activation showed us a lot of things about although we were discussing BIP 8 and BIP 9. The category 3 risks right now I think are very unknown. That is my biggest concern. I would like to see that there isn’t any kind of precedent established where this kind of stuff could be exploited in the future. It is a really tough line to draw exactly how aggressive we should be with this and whether that sets something up for someone else in the future to do something bad. I think we can only learn by doing it and we have to take risks. We are already in unchartered territory with Bitcoin. Bitcoin is already a risky proposition to begin with. We have to take some risks. They should be calculated risks and we should learn as we go along and correct ourselves as quickly as possible. Other than that I don’t really know exactly what the process will end up looking like. We are learning a lot. Right now the category 3 stuff I think is the key stuff we are going to see if this thing actually happens. That is really important to consider.
 
 AvW: Luke any final thoughts?
 

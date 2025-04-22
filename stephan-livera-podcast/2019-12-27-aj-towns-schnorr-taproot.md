@@ -1,19 +1,15 @@
 ---
-title: Schnorr and Taproot
+title: Schnorr Taproot Tapscript BIPs
 transcript_by: Michael Folkson
-speakers: ['Anthony Towns']
-categories: ['podcast']
-tags: ['taproot', 'schnorr']
+speakers:
+  - Anthony Towns
+tags:
+  - taproot
+  - schnorr-signatures
+  - tapscript
 date: 2019-12-27
 media: https://stephanlivera.com/episode/137/
 ---
-
-Topic: Schnorr Taproot Tapscript BIPs
-
-Location: Stephan Livera Podcast
-
-# Transcript
-
 Stephan Livera: AJ, welcome to the show.
 
 AJ Towns: Howdy.

@@ -1,11 +1,9 @@
 ---
 title: Mcf Episode
 transcript_by: Bryan Bishop
-categories: ['conference']
 date: 2019-05-11
 media: https://youtu.be/0MnuvKybuo0?t=1463
 ---
-
 Video MCF Short: https://youtu.be/SnfKIKL_Ghk
 
 WP: The short was not about Craig Wright. It was not about him being a fraud, because he is not a fraud.
@@ -350,5 +348,5 @@ CL: He said yes.
 
 Q: Can you talk about the ramifications?
 
-FP: Sure. The flood XMR paper is an extension of an attack that the Monero Research Lab detailed in their first paper in 2014 which basically says, if you own like 70-80% of the outputs on the network then you will be able to figure out with reasonable odds of certainty which is the true side of the ring signature. The problem with flood XMR is that they made a bunch of assumptions and they said it's trivial to own transactions on the network because outputs are super cheap, so you can create billions of outputs. They had a bunch of things wrong. The entire hypothesis was based on creating transactions with 100 outputs. But monero limits outputs to 16 outputs. 
+FP: Sure. The flood XMR paper is an extension of an attack that the Monero Research Lab detailed in their first paper in 2014 which basically says, if you own like 70-80% of the outputs on the network then you will be able to figure out with reasonable odds of certainty which is the true side of the ring signature. The problem with flood XMR is that they made a bunch of assumptions and they said it's trivial to own transactions on the network because outputs are super cheap, so you can create billions of outputs. They had a bunch of things wrong. The entire hypothesis was based on creating transactions with 100 outputs. But monero limits outputs to 16 outputs.
 

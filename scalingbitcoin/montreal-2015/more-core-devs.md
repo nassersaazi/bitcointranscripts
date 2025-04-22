@@ -1,10 +1,11 @@
 ---
-title: More Core Devs
+title: 'How can we get 10x the number of "core" contributors?'
 transcript_by: Bryan Bishop
-categories: ['conference']
-tags: ['ux']
+tags:
+  - bitcoin-core
+  - career
+date: 2015-09-13
 ---
-
 10x the number of core devs
 
 Objectives:
@@ -12,7 +13,7 @@ Objectives:
 * 10x would only be like <1000 bitcoin developers
 * 7000 fedora developers
 * how do we grow developers?
-* 
+*
 
 how many tor developers? how many linux developers?
 

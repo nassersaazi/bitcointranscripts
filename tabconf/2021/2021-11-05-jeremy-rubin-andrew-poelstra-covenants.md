@@ -1,22 +1,17 @@
 ---
-title: Covenants 
+title: Covenants
 transcript_by: Jeremy Rubin
-categories: ['conference']
-tags: ['covenants']
+tags:
+  - covenants
 date: 2021-11-05
-speakers: ['Jeremy Rubin', 'Andrew Poelstra']
+speakers:
+  - Jeremy Rubin
+  - Andrew Poelstra
 ---
-
-Topic: Covenants
-
-Location: TABConf (The Atlanta Bitcoin Conference)
-
-Video: No video was posted online
-
 As per Socratic village rules names of all attendees (other than the advertised speakers) have been anonymized and audio will not be published to preserve anonymity of the question askers.
 
 # The covenant concept
- Shaun Apps (SA): I’ll kick things off with a bit of an introduction. Both Andrew and Jeremy will present. And then we will go through some questions and we'll go to questions from the audience after that. So that's the format for this.
+Shaun Apps (SA): I’ll kick things off with a bit of an introduction. Both Andrew and Jeremy will present. And then we will go through some questions and we'll go to questions from the audience after that. So that's the format for this.
 
 SA: So, covenants. This term has historical context when it comes to religion and law. Many of us might be familiar with covenants within the bounds of property law constraining or bounding the use of land for example by covenant. But how many people here have heard of covenants as it relates to Bitcoin? Okay, good amount of people. So at a high level covenants provide the Bitcoin script introspection, such that you can constrain how an output will be spent by some predefined bounds. I'm not really sure how far back exactly covenants go. There is this seminal Bitcoin talk [post](https://bitcointalk.org/index.php?topic=278122.0) by Greg Maxwell introducing the concept of covenants and providing a few amusing examples. For example, a Smashcoin covenant where spending the coin that covenant has to provide proof of an attack on an alternative cryptocurrency or even something like an adultcoin covenant, where the data provided would be someone's date of birth, and it would constrain that recipient to be older than 18. Of course these are just amusing and silly and fun examples of the covenants concept and this is just a post in jest. However, there are some very exciting use cases for covenants which we will get into today. We have Andrew Poelstra and Jeremy Rubin, Andrew is going to be approaching covenants from the perspective of CHECKSIGFROMSTACK also known as CSFS. And Jeremy will be presenting on CHECKTEMPLATEVERIFY, referred to by CTV. So with covenants, there's no one singular way of doing them in Bitcoin. There's different ideas, different proposals, they each have their own trade-offs and use cases. So we will get into that. Andrew, do you want to go ahead and get started?
 
@@ -26,7 +21,7 @@ Jeremy Rubin (JR): Earliest I know.
 
 # Recursive and non-recursive covenants
 
-AP: There are kind of two different categories of covenants that I'm going to call recursive covenants and non recursive covenants. I think that's probably also the terminology that was used in this post. What a covenant is, is just a way to constrain where the coins are going. Using Bitcoin script you can determine under what conditions can a coin move, but once those conditions are met they can go wherever. A covenant lets you constrain that further and do all sorts of silly stuff like this. There's a distinction to be made between non-recursive covenants and recursive ones, where non-recursive covenants let you constrain where the coins are going. Then you can maybe constrain it to be in another covenant which further constrains and so on. You've got to map out the entire future of these coins, you can only go so many hops but you've got to write out all of your constraints, all on the first shot. Whereas recursive covenants are ones where you can constrain the coins to go back into a covenant of essentially the same shape as where they came from. Thereby creating a sort of finite state machine that the coins can move between. Either they just stay in one place and some constants change or they can go to different states or they can come back around. You can create covenants the coins don't escape from in this way. Even the way that I worded that, “don't escape from” reflects the the danger inherent in this and reflects the fear that people have had over the years about enabling recursive covenants. 
+AP: There are kind of two different categories of covenants that I'm going to call recursive covenants and non recursive covenants. I think that's probably also the terminology that was used in this post. What a covenant is, is just a way to constrain where the coins are going. Using Bitcoin script you can determine under what conditions can a coin move, but once those conditions are met they can go wherever. A covenant lets you constrain that further and do all sorts of silly stuff like this. There's a distinction to be made between non-recursive covenants and recursive ones, where non-recursive covenants let you constrain where the coins are going. Then you can maybe constrain it to be in another covenant which further constrains and so on. You've got to map out the entire future of these coins, you can only go so many hops but you've got to write out all of your constraints, all on the first shot. Whereas recursive covenants are ones where you can constrain the coins to go back into a covenant of essentially the same shape as where they came from. Thereby creating a sort of finite state machine that the coins can move between. Either they just stay in one place and some constants change or they can go to different states or they can come back around. You can create covenants the coins don't escape from in this way. Even the way that I worded that, “don't escape from” reflects the the danger inherent in this and reflects the fear that people have had over the years about enabling recursive covenants.
 
 # Different covenant proposals
 

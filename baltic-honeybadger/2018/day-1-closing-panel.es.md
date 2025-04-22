@@ -1,12 +1,17 @@
 ---
-title: Panel de clausura del primer día 
+title: Panel de clausura del primer día
 transcript_by: Bryan Bishop
 translation_by: Blue Moon
-categories: ['conferencia']
-tags: ['lightning']
-speakers: ['Elizabeth Stark', 'Peter Todd', 'Jameson Lopp', 'Eric Voskuil', 'Alex Petrov', 'Roman Snitko']
+tags:
+  - lightning
+speakers:
+  - Elizabeth Stark
+  - Peter Todd
+  - Jameson Lopp
+  - Eric Voskuil
+  - Alex Petrov
+  - Roman Snitko
 ---
-
 Panel de cierre
 
 <https://twitter.com/kanzure/status/1043517333640241152>

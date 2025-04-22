@@ -1,24 +1,22 @@
 ---
-title: Merkle Sets
+title: Merkle Set Data Structures for Scaling Bitcoin
 transcript_by: Bryan Bishop
-categories: ['meetup']
-speakers: ['Bram Cohen']
-tags: ['merkle trees']
+speakers:
+  - Bram Cohen
+tags:
+  - cryptography
 date: 2017-07-08
 media: https://www.youtube.com/watch?v=52FVkHlCh7Y
 ---
-
-Merkle set data structures for scaling bitcoin
-
 code: <https://github.com/bramcohen/MerkleSet>
 
 <https://twitter.com/kanzure/status/888836850529558531>
 
-# Introduction
+## Introduction
 
 There's been a fair amount of talk about putting <a href="http://diyhpl.us/~bryan/irc/bitcoin/utxo-commitments-or-fraud-proofs.stdout.txt">UTXO commitments</a> in bitcoin blocks. Whether this is a good idea or not, but on the off-chance that it might be a good idea, I spent a fair amount of time thinking and actually good merkle set implementation whic his what you you need to put utxo set commitments in bitcoin blocks. There are other benefits to this, in that there are actually a million and one uses for merkle sets in general, and it's actually a general interesting problem and it performs well. So I figured I would make it, and if it's not useful to me, then it might be useful to someone anyway.
 
-# High-performance merkle set implementation
+## High-performance merkle set implementation
 
 Okay, so. Merkle set. For those of you who aren't aware, this is sometimes-- sometimes people call it a hash set, based on hash tree, and then Ralph Merkle gets really mad at you. Since he's still alive, we still call them merkle trees. A merkle set is a set which contains arrays of bytes, it keeps track of its merkle root. All the things at the terminal things are the things contained in the set, in the middle are summaries, and then the root. You can use the root to prove, for someone who has the root, to prove whether something is or is not in the set.
 
@@ -30,7 +28,7 @@ So I'm using a patricia trie. There's a number of subtle different ways of makin
 
 There's one more trick that's actually part of the semantics of this that I came up with, which is that if you have only two things below a particular point, and it's empty on the other side, you do a pass-through. If you look at the bottom here, there's 2 terminals, so the thing that has those 2 terminals children has to do a calculation to figure out the root value there. Above that, there's something where the other side is empty, so that does a "pass-through" because the other side is empty and it only has those 2 values. And then there's another layer that is also empty on the other side, so it does a pass-through. At the top of my diagram, there's a layer where there's no empty on the other side, so it has to  do the tree. The other one has an empty at the very top of the tree, but it doesn't work out because there's hashing to be done there. So this gets rid of a lot of the hashing. It's a substantial optimization and it's worth doing.
 
-# Reinventing memory management for fun and profit
+## Reinventing memory management for fun and profit
 
 I have on github a merkle set git repository which is an implementation of this. It's in python, which is ridiculous. It needs to be ported to C soon. That has a reference implementation which is very straightforward, and a high performance implementation that isn't high performance yet. There are subtleties to what the performance needs are. In modern architectures, you spend all of your time waiting for memory. The exact subtleties of how that works aren't clear. When you're accessing memory, you want to get things near each other all together. In the extreme version, it's a physical hard drive where a seek is expensive but reading everything at once isn't an issue. In SSD this is less so, but it continues up the memory hierarchy. So you have to arrange things that are near each other are near each other in memory.
 
@@ -88,17 +86,17 @@ Q: Your block structure doesn't change the resulting root hash?
 
 A: Yeah. The block structure does not change the root hash whatsoever. I implemented this as a very simple reference implementation which is quite straightforward. It has some nice properties. If you are doing things with lots of fallbacks, and you want to keep lots of roots without copying everything over, everything is immutable in it. The performant one-- everything is really mutable and if you want to get back you have to rollback. They do absolutely the same exact thing, and I have extensive tests, the way these tests work is that they have just a random bunch of strings and they repeatedly add one string at a time and they report the root each time and they make sure everything added is still there, and everything added isn't there yet, and then deletes them one at a time and works its way back. Once it has tested the reference implementation, it does this for other parameters including fairly degenerate ones, for the performant one. I found a lot of bugs. It has 98% code coverage with a fairly small amount of test code.
 
-# TXO bitfields
+## TXO bitfields
 
-Any more questions? Okay, something that I am fairly sure will be controversial. Unfortunately the <a href="https://lists.linuxfoundation.org/mailman/listinfo/bitcoin-dev">bitcoin-dev mailing list</a> has got completely drowned in discussions of subtleties of upgrade paths recently (laughter). So there hasn't been too much discussion of real engineering, much to my dismay. But, so, using a merkle set is kind of a blunt hammer, all problems can be solved with a merkle set. And maybe in some cases, something a little bit more white box, that knows a little bit more about what's going on under the hood, might perform better. So here's a thought. My merkle set proposal has an implementation with defined behavior. But right now, the way things work, you implicitly have a UTXO set, and a wallet has a private key, it generates a transaction, sends it to a full node that has a UTXO set so that it can validate the transaction, and the UTXO set size is approximately the number of things in the UTXO set multiplied by 32 bytes. So the number over here is kind of big and you might want it to be smaller.
+Any more questions? Okay, something that I am fairly sure will be controversial. Unfortunately the <a href="https://gnusha.org/url/https://lists.linuxfoundation.org/mailman/listinfo/bitcoin-dev">bitcoin-dev mailing list</a> has got completely drowned in discussions of subtleties of upgrade paths recently (laughter). So there hasn't been too much discussion of real engineering, much to my dismay. But, so, using a merkle set is kind of a blunt hammer, all problems can be solved with a merkle set. And maybe in some cases, something a little bit more white box, that knows a little bit more about what's going on under the hood, might perform better. So here's a thought. My merkle set proposal has an implementation with defined behavior. But right now, the way things work, you implicitly have a UTXO set, and a wallet has a private key, it generates a transaction, sends it to a full node that has a UTXO set so that it can validate the transaction, and the UTXO set size is approximately the number of things in the UTXO set multiplied by 32 bytes. So the number over here is kind of big and you might want it to be smaller.
 
 So there's been discussions of maybe using UTXO bit fields, I had a good discussion with petertodd about his alternative approach to this whole thing, wherein I said this weird comment because he likes UTXO bit fields, I said the thing that might be useful there is that you can compress things down a lot. And it turns out that this really helps a lot. I had this idea for a UTXO bit field. UTXO is all the unspent transaction outputs. It includes all unspents. The idea with a UTXO bit field is that you have a wallet, a proof of position and its private key. As things are added to blocks, each one has a position, and no matter how many things are added later, it is already in the same position always. So to make the validation easier for the full node, the wallet will give the proof of position which it remembers for the relevant inputs that it's using, and bundles that with the transaction to send it to the full node, who then a miner puts it into a block. The proofs of positions will be substantially larger than the transactions, so that's a tradeoff.
 
-So this goes to a full node, and it has to remember a little bit more than before. It has to remember a list of position roots per block. For every single block, it remembers a root of a commitment that can be canonically calculated for that block, of the positions for all the inputs in it, to allow it to verify the proof of position. And it also has a <a href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-March/013928.html">TXO bitfield</a>. The full node takes the proof of position and verifies the alleged position using the data it remembers for validating that. And then it looks it up in the TXO bit field, which in the simplest implementation is a trivial data structure, it's a bit field, and you look it up by position. It's not complex at all. It's one look up, it's probably very close to other lookups because you're probably looking at recent information, and these are all 1 bit each, so they are much closer to each other. The size of the TXO bit field is equal to the TXO size divided by 8. So this is a constant factor improvement of 256. Computer science people usually don't care about constant factors, but 256 makes a big difference in the real world. This also has the beenfit that my merkle set is a couple hundred lines of fairly technical code, it has extensive testing but it's not something that I particularly trust someone to go ahead and re-implement well from that, it's something where I would expect someone to port the existing code and existing tests. Whereas I would have much ore confidence that someone could implement a TXO bit field from a spec and get it right.
+So this goes to a full node, and it has to remember a little bit more than before. It has to remember a list of position roots per block. For every single block, it remembers a root of a commitment that can be canonically calculated for that block, of the positions for all the inputs in it, to allow it to verify the proof of position. And it also has a <a href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-March/013928.html">TXO bitfield</a>. The full node takes the proof of position and verifies the alleged position using the data it remembers for validating that. And then it looks it up in the TXO bit field, which in the simplest implementation is a trivial data structure, it's a bit field, and you look it up by position. It's not complex at all. It's one look up, it's probably very close to other lookups because you're probably looking at recent information, and these are all 1 bit each, so they are much closer to each other. The size of the TXO bit field is equal to the TXO size divided by 8. So this is a constant factor improvement of 256. Computer science people usually don't care about constant factors, but 256 makes a big difference in the real world. This also has the beenfit that my merkle set is a couple hundred lines of fairly technical code, it has extensive testing but it's not something that I particularly trust someone to go ahead and re-implement well from that, it's something where I would expect someone to port the existing code and existing tests. Whereas I would have much ore confidence that someone could implement a TXO bit field from a spec and get it right.
 
 The downside is that these proofs of positions are much bigger than the transactions. And this is based on the TXO set size, rather than the UTXO set size which is probably trending towards some constant. In the long term it might grow iwthout bound. There is a pretty straightforward way of fixing that, which is making a fancier bit field. When it's sparse, at the expense of it being much more interesting to implement, you can retain the exact same semantics while making the physical size that the bitfield usig is equal to the number of bits that are set to 1 times the log of the total number of bits, which isn't scary in the slightest. So this is still going to be quite small. To get this working, you'd have to go through an exercise about making a good merkle set, and someone is going to have to think about it, experiment with it and figure out what implementation is going to perform well. Whereas a straightforward bit field is just trivial.
 
-<a href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-June/012758.html">Any</a> <a href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-March/013928.html">discussion</a> of <a href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-February/013592.html">this</a> got drowned out with the mailing list's very important discussion about segwit. But I think this is an approach worth considering, with the given caveats about its performane, it has a lot going for it, rather than doing UTXO commimtents in blocks in bitcoin. Merkle sets can do a lot more things for a lot more stuff than just in bitcoin. I think they shine when you have truly gigantic sets of data-- probably people that have permissioned blockchains should be using merkle sets, not really bitcoin I guess.
+<a href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-June/012758.html">Any</a> <a href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-March/013928.html">discussion</a> of <a href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-February/013592.html">this</a> got drowned out with the mailing list's very important discussion about segwit. But I think this is an approach worth considering, with the given caveats about its performane, it has a lot going for it, rather than doing UTXO commimtents in blocks in bitcoin. Merkle sets can do a lot more things for a lot more stuff than just in bitcoin. I think they shine when you have truly gigantic sets of data-- probably people that have permissioned blockchains should be using merkle sets, not really bitcoin I guess.
 
 Q: The proof of position... is that position data immutable?
 
@@ -180,10 +178,10 @@ A: It doesn't have to be per block. I like per block, because it's a good idea f
 
 Q: But we already have linear amount of data from the blocks that are available. I agree.
 
-# Other links
+## Other links
 
-delayed txo commitments <https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-May/012715.html>
+delayed txo commitments <https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2016-May/012715.html>
 
-TXO commitments do not need a soft-fork to be useful <https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-February/013591.html>
+TXO commitments do not need a soft-fork to be useful <https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-February/013591.html>
 
-rolling UTXO set hashes <https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-May/014337.html>
+rolling UTXO set hashes <https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2017-May/014337.html>

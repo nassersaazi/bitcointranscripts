@@ -1,8 +1,8 @@
 ---
-title: Sidechains Elements 
+title: Sidechains Elements
 speakers: ['Greg Maxwell']
 transcript_by: Bryan Bishop
-tag: ['sidechains']
+tags: ['sidechains']
 date: 2015-06-08
 media: https://s3-us-west-1.amazonaws.com/blkstrm/video/elements-gmaxwell.mp4
 ---

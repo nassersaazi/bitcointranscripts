@@ -1,15 +1,17 @@
 ---
 title: Improving Bitcoin Smart Contract Efficiency
 transcript_by: Bryan Bishop
-categories: ['conference']
-tags: ['taproot', 'smart contracts', 'lightning']
-speakers: ['Tadge Dryja']
+tags:
+  - taproot
+  - contract-protocols
+  - dlc
+speakers:
+  - Tadge Dryja
 media: https://www.youtube.com/watch?v=i-0NUqIVVV4&t=53m14s
 ---
-
 <https://twitter.com/kanzure/status/980545280973201410>
 
-# Introduction
+## Introduction
 
 I will be talking about discreet log contracts, taproot, and graftroot. Not in that order, the order will actually be taproot, graftroot, and then discreet log contracts.
 
@@ -17,7 +19,7 @@ Quick intro: I'm Tadge Dryja. I work here at MIT down the street at Digital Curr
 
 I only have about 20 minutes and this is only meant to get you introduced to it, please bug me later if you would like even more details.
 
-# Smart contracts
+## Smart contracts
 
 So, what is a smart contract? There's no real good answer to that question. A lot of people think one thing is a smart contract while another isn't or something. All outputs in bitcoin are smart contracts because they use bitcoin script. Even pay-to-pubkeyhash with OP\_DUP OP\_HASH160 and OP\_EQUALVERIFY... So in my view, pay-to-pubkeyhash is not really a smart contract. You're just sending money. It's functionally the same as using cash.
 
@@ -27,7 +29,7 @@ What about OP\_CHECKLOCKTIMEVERIFY where there's an output and it can't be spent
 
 And then there's stuff like the <a href="https://lightning.network/">lightning network</a> where the scripts in lightning are using multisig, OP\_CHECKLOCKTIMEVERIFY and revealing secrets to revoke old state. I'd say, yeah, that's a smart contract. It's a fairly limited one compared to what people are looking at, but this is a smart contract with conditoinal payments and things like that.
 
-# Smart contracts in bitcoin
+## Smart contracts in bitcoin
 
 How do we do smart contracts in bitcoin? It's not the same model as in ethereum. You have-- there's basically two output types that you can see on bitcoin today. There's pay-to-pubkeyhash (P2PKH) and <a href="https://github.com/bitcoin/bips/blob/master/bip-0016.mediawiki">pay-to-scripthash (P2SH)</a>. In P2PKH, there's a key, you can spend to the key, pretty straightforward.
 
@@ -35,11 +37,11 @@ In P2SH, you take some kind of script or program or a predicate, you hash it, an
 
 So you have these two different output types in bitcoin. And these two different output types look different, and that's bad. Why is that bad? Well, in bitcoin, you want fungibility and uniformity. You want it so that when Chainalysis and other similar companies that when they look at the blockchain that they get nothing. Ideally they just have nothing and just see random numbers and random outputs with uniform distribution of addresses. So you want to make everything uniform. One idea to do this is something called taproot.
 
-# Taproot
+## Taproot
 
 <http://diyhpl.us/wiki/transcripts/bitcoin-core-dev-tech/2018-03-06-taproot-graftroot-etc/>
 
-<a href="https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-January/015614.html">Taproot</a> is an idea from Greg Maxwell, who is somewhat of a bitcoin guru. He knows a lot about bitcoin. He wrote a post introducing taproot a couple of weeks ago. It merges p2sh and p2pkh. It does this in a very annoyingly-simple way where we started wondering why nobody thought of this before.
+<a href="https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-January/015614.html">Taproot</a> is an idea from Greg Maxwell, who is somewhat of a bitcoin guru. He knows a lot about bitcoin. He wrote a post introducing taproot a couple of weeks ago. It merges p2sh and p2pkh. It does this in a very annoyingly-simple way where we started wondering why nobody thought of this before.
 
 You start by making a public key, the same way you do to create your addresses. Say you have your script S. What you do is you compute the key C and you send the taproot. I skipped the elliptic curve operations, but if you're familiar with any of this stuff then this is how you turn a private key into a public key, you multiply by G. You can add public keys together, it's quick and really simple to do. And if you add the public keys, then you can sign with the sum of the private keys, which is a really cool detail. What you do is say you have a regular key pair, and you also have this script and you perform this taproot equation. You hash the script and the public key together, you use that as a private key, turn that into a public key, and add that to my existing public key. This allows you to have both a script and a key squished into one thing. C is essentially a public key but it also has a script in it. When you want to spend from it, you have the option to use the key part or the script part. If you want to treat it as P2PKH, where you're a person signing off with this, then you know your private key will just be your regular private key plus this hash that you computed which you know. So you sign as if there were no scripts and nobody will be able to detect that there was a script -it looks like a regular signature. But if you want to reveal the script, you can do so, and then people can verify that it is still valid, and then they can execute the script. It's a way of merging p2pkh and p2sh into one.
 
@@ -47,9 +49,9 @@ It's nice because in many cases in smart contracts, there's a bunch of people ge
 
 .... ((stream died)) ...
 
-# Graftroot
+## Graftroot
 
-<https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-February/015700.html>
+<https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2018-February/015700.html>
 
 <http://diyhpl.us/wiki/transcripts/bitcoin-core-dev-tech/2018-03-06-taproot-graftroot-etc/>
 
@@ -59,7 +61,7 @@ The downside is that you have to sign. In taproot and p2sh, it's only operating 
 
 I have 10 minutes left.
 
-# Discreet log contracts
+## Discreet log contracts
 
 <http://diyhpl.us/wiki/transcripts/discreet-log-contracts/>
 
@@ -79,7 +81,7 @@ It's a third-party oracle model. In many other oracle models like in ethereum, g
 
 There are use cases like currency futures where you can make contracts on the price of bitcoin that settles into bitcoin. It's the opposite of CME and CBOE where they do cash-settled futures. You can also do a lot of other stuff like betting and gambling which I guess people will do. The downside is that you have to enumerate all possible outcomes, so some things it doesn't work, like if there's tens and tens of millions of possible outcomes then it might become unscalable. But if you have a small finite number of outputs, and it's bounded, it's based on how much data you can store, and the only thing going into the blockchain in all cases is just the first one transaction and maybe the spending transaction.
 
-# Q&A
+## Q&A
 
 <https://www.youtube.com/watch?v=i-0NUqIVVV4&t=1h9m54s>
 

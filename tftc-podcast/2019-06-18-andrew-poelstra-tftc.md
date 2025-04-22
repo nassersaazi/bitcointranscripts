@@ -1,19 +1,20 @@
 ---
 title: Tales from the Crypt with Andrew Poelstra
 transcript_by: Michael Folkson
-categories: ['podcast']
-tags: ['taproot', 'schnorr', 'musig', 'miniscript' ]
+tags:
+  - taproot
+  - schnorr-signatures
+  - musig
+  - miniscript
 date: 2019-06-18
-speakers: ['Andrew Poelstra']
+speakers:
+  - Andrew Poelstra
+episode: 80
+media: https://talesfromthecrypt.libsyn.com/tales-from-the-crypt-80-andrew-poelstra
 ---
-
-TFTC podcast with Andrew Poelstra - June 18th 2019 (Abridged)
-
 <https://twitter.com/kanzure/status/1160178010986876928>
 
-Podcast: <https://talesfromthecrypt.libsyn.com/tales-from-the-crypt-80-andrew-poelstra>
-
-# How the idea of Taproot was formed
+## How the idea of Taproot was formed
 
 Andrew: There are some small off suit IRC channels of bitcoin-wizards where people discuss some specific topics such as Minisketch which is a set reconciliation protocol that was developed by Greg Maxwell, Pieter Wuille and Gleb Naumenko among a couple of others. It was mostly those three. They have a channel where they talk about things. There is one where there was a whole bunch of discussion leading up to the Taproot BIP proposal. There was five or six of us that were iterating on that. In addition to that some conversations happen in private communication, in emails and IRC messages and stuff. And then a fair bit happens face to face. We try to meet people at conferences, we try to meet each other if we are in the same city, usually we’ll call each other. One cool example of this is Taproot itself. The original idea for Taproot was developed by Greg Maxwell, Pieter Wuille and myself. We were at a diner in California, within 100 miles of the San Francisco Bay I’ll say. We were just getting breakfast and talking and shooting the s*** as we do. Taproot showed up kind of serendipitously. What had happened was that somebody had messaged Greg privately asking about some more efficient script construction they had for hiding a timelocked emergency clause for their spending policy. I had also had basically the same problem. It may have been with Larry working on Blockstream Green actually. Greg and I were talking about this thinking if we had a future version of Bitcoin script how could we hide these timelocks? Is there any way we can make the timelocks take like zero space. We got it down to 32 bytes and then we were spitballing about this construction we knew about that would let you hide stuff inside of an elliptic curve public key with zero additional space. I thought “Hey what if we took the public keys that go through CHECKSIG and we had an alternate CHECKSIG operator that would expand the public key and pull out this hidden data? Then you could spend that script and stuff. Greg said “Screw CHECKSIG. What if that was the output? What if we just put the public key in the output and then by default you signed it.” That was where Taproot came from. It was a very quick exchange of ideas. It was not only because we had a small set of people who all knew each other very well and we tend not to miscommunicate and we can talk very quickly. But also because we were all in person we were able to communicate very quickly, there’s a lot of facial…
 
@@ -21,11 +22,11 @@ Marty: You can read inflections and stuff like that. That’s why I do these int
 
 Andrew: It is just much easier to come up with ideas like that, at least the seeds of ideas. There is quite a bit of discussion that happens that way. I think all of us try to find our way to certain conferences throughout the year where we know there will be other people in the Bitcoin crypto community.
 
-# Schnorr signatures
+## Schnorr signatures
 
 Andrew: Schnorr is a crypto primitive called the digital signature. It is a replacement for ECDSA which is also a digital signature. Schnorr signatures are basically the simplest possible digital signature. They are the most obvious, if you were to come up with a digital signature you would come up with this. They are incredibly obvious, they are a derivative of a bunch of other work that had been done. Unfortunately the US Patent Office disagreed with the fact that is obviously a derivative. They granted Schnorr a patent that lasted from 1990 until 2008 which is why Bitcoin uses ECDSA today. So what we’re doing is we’re going back to the signatures that we should have been using that have a very simple algebraic structure. The consequence of that algebraic structure is that they are very extensible. There are a lot of things that we can do with Schnorr signatures. Ultimately Schnorr itself is a drop in replacement for ECDSA. It is kind of not very interesting by itself. I can certainly list the things in the Taproot and Tapscript proposals that we are able to efficiently do or do at all because we have Schnorr signatures as a primitive rather than being stuck using ECDSA.
 
-# Taproot
+## Taproot
 
 So Taproot itself. As I mentioned, it is this construction where you hide a script inside of a public key. The idea here is that since most coins are spent by somebody creating a single signature we should privilege that mode of spending. Your coins that you and I have in our Bitcoin wallets, our coins have public keys associated to them. Right now those public keys are encoded on the Bitcoin blockchain in the form of a script. A script that says here is the public key, give me a signature that validates to those public keys. Here we just make that implicit. We just put the public key there, no script, no anything. Only if there is something other than a signature you need to satisfy the conditions of spending these coins do you need to reveal your script in Taproot. You reveal your script and anybody can verify that the script was actually committed inside of the public key. But if you don’t reveal it nobody can tell what the script was or even that it was there. This was cool by itself but if that were the whole story it probably would not get a lot of traction. People would be very suspicious. They would say “Well maybe right now people are using single keys for all their Bitcoin but they shouldn’t because that’s fragile and it increases the risk of losing keys or key corruption or the many things it increases the risk of.” One thing that Schnorr signatures get us which makes this interesting again is that with Schnorr you can very efficiently create multisignatures and threshold signatures that are themselves Schnorr signatures. You can think of this as making a multisignature or you can think of this as jointly producing a single signature. The idea here is that something like Blockstream Green where we have a 2-of-3 threshold signature, if we had Schnorr signatures rather than doing that the way we do today where you have two signatures and you put two signatures onto the blockchain, the user of the Green wallet and Blockstream would jointly produce a single signature that hits the blockchain. Because there’s one signature you can spend it using Taproot without revealing any scripts. Now we’ve extended the things you can do with just a signature from somebody spending their own coins to any kind of multisignature or threshold signature or more complicated policy related to signatures.
 
@@ -33,7 +34,7 @@ Marty: And this is when you’re looking at it on the blockchain you can’t rea
 
 Andrew: Yeah exactly. You get a tremendous privacy and fungibility boost because there is no difference from a verifier’s perspective between a normal single signer signature and something more complicated that may have been created by Blockstream Green or by BitGo or by Casa or by Liquid or any of these things that are using multisignatures today. They would all look the same and verify the same.
 
-# Miniscript
+## Miniscript
 
 Marty: That’s a good segue into Miniscript, something that you’ve been working on. This would work without Taproot, Schnorr and any of this but it is something that would make the unique scripts that something like BitGo makes, that you guys make for Liquid and other stuff, you’re able to communicate across correct?
 
@@ -45,7 +46,7 @@ Andrew: It is not quite that. They would have different Miniscripts but they wou
 
 Marty: So almost like an efficiency alarm?
 
-Andrew: It lets you do things more efficiently. Actually kind of amusingly I’m aware of two examples of people who using Miniscript were able to find more efficient scripts than the ones they had come up with by hand. One of them was us with Liquid. We were able to save 2 bytes in our Liquid spending policy using Miniscript versus the scheme that we came up with. The other is the company called Arwen in the Boston area. This is Sharon Goldberg and Ethan Heilman and a few folks like that. 
+Andrew: It lets you do things more efficiently. Actually kind of amusingly I’m aware of two examples of people who using Miniscript were able to find more efficient scripts than the ones they had come up with by hand. One of them was us with Liquid. We were able to save 2 bytes in our Liquid spending policy using Miniscript versus the scheme that we came up with. The other is the company called Arwen in the Boston area. This is Sharon Goldberg and Ethan Heilman and a few folks like that.
 
 Marty: They’re doing custody solutions correct?
 
@@ -57,7 +58,7 @@ Andrew: So Miniscript is probably bad for the size of the chainstate because it 
 
 Marty: This will be something like if you don’t sign a message every n blocks release to this address or something like that?
 
-Andrew: It would be something like that. I’d set n to be six or twelve months I think. The most you can set in Bitcoin script is twelve months I believe. I forget the exact reason, I think it is the number of blocks. 
+Andrew: It would be something like that. I’d set n to be six or twelve months I think. The most you can set in Bitcoin script is twelve months I believe. I forget the exact reason, I think it is the number of blocks.
 
 Marty: So does it use UNIX time to derive that or is it going on block height and guesstimated year length?
 
@@ -91,7 +92,7 @@ Marty: Keep it simple stupid.
 
 Andrew: Yeah exactly. Fortunately we didn’t have to sacrifice efficiency anywhere to get that. We were worried that we would but it turned out everywhere where something was difficult there was an equivalent construction that wasn’t so difficult. The story behind how Miniscript started was Carl Dong who is a Bitcoin developer who works at Chaincode right now….
 
-Marty: TFTC alum too, he has been on this podcast talking about GUIX containers. 
+Marty: TFTC alum too, he has been on this podcast talking about GUIX containers.
 
 Andrew: Carl is one of the maintainers of the rust-bitcoin project, a library that does all sorts of Bitcoin transaction and block related things for Bitcoin. He wanted to add some support for multisignatures so he wrote some code and he wrote some unit tests, it was all solid stuff but he had templated a specific kind of multisignature and I said “I don’t want that in the library. This is a general library and we’re not going to use your special purpose multisignature thing because that is one specific thing you’re doing is multisignatures. To be clear I was being irrational here, multisignatures are very general. I was like “No that’s too specific.” What if I wanted to do a multisignature and a hash preimage or something? Carl said “What the hell do you want me to do? I’m not going to write a general script analysis engine or something so you don’t have templates in your unit tests.” I said “Ok let me think about this.” I happened to be in Mountainview near Blockstream’s office at the time so I was able to go locate Pieter Wuille. I said “Pieter I need to define a subset of script that will contain everything that I care about but that isn’t just a fixed set of templates.” And he said “That’s funny because we need to do the same thing in Bitcoin Core.” So we both independently had the goal of creating such a thing. So we got to work doing this, we took out two or three whiteboards in the Blockstream office in Mountainview and we spent like 40 hours laboriously going through every possible Bitcoin script construction we could think of and counting OP codes, counting bytes and reasoning about how much it would cost to satisfy them. At the end what we came up with was Miniscript. It was a combination of a lot of hard work and grinding to get the most efficient thing that we possibly do that we were a little obsessive of. And Pieter knowing the computer science stuff about what could be efficiently satisfied and what could be efficiently reasoned about. Pieter was able to write a compiler from an abstract, even more human readable language than Miniscript to Miniscript where it would choose the most optimal of all the different Miniscript constructions.
 
@@ -109,7 +110,7 @@ Andrew: We didn’t think so, no. After doing the first ten million then we star
 
 Marty: Just learnt a lot in the last 52 minutes here, blowing my mind with this. How do you keep all of this in your head? So you have Miniscript, Taproot, all this stuff that you can describe intently. You’re working on Musig as well too right?
 
-# Musig
+## Musig
 
 Andrew: Yeah I am working on Musig.
 
@@ -117,7 +118,7 @@ Marty: That taps into Taproot and Graftroot to help smart contracting capaibilit
 
 Andrew: Yes. So Musig is the protocol that lets you jointly produce a Schnorr signature. So if you have a single signature that needs to produced by multiple people, those people run the Musig protocol offchain and what comes out is a single signature that you would use as Taproot.
 
-Marty: So do you like working on these different aspects? Does it help you stay motivated and do you like jumping from concept to concept? 
+Marty: So do you like working on these different aspects? Does it help you stay motivated and do you like jumping from concept to concept?
 
 Andrew: Yeah it is very cool to have this high level view of the system. I used to wonder about Greg Maxwell who knows everything about Bitcoin, how could he possibly do this?
 

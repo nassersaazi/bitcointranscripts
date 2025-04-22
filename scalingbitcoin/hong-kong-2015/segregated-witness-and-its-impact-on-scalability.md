@@ -1,12 +1,12 @@
 ---
 title: Segregated Witness And Its Impact On Scalability
 transcript_by: Bryan Bishop
-categories: ['conference']
-tags: ['segregated witness', 'segwit']
-speakers: ['Pieter Wuille']
+tags:
+  - segwit
+speakers:
+  - Pieter Wuille
 media: https://www.youtube.com/watch?v=fst1IK_mrng&t=36m
 ---
-
 slides: <https://prezi.com/lyghixkrguao/segregated-witness-and-deploying-it-for-bitcoin/>
 
 code: <https://github.com/sipa/bitcoin/commits/segwit>
@@ -32,7 +32,7 @@ We don't care that what it is, well we do for auditing purposes, like in multi-s
 Wouldn't it be nice to just drop the signatures? The reason why we can't do this is because the signature is part of the transaction hash. If we would just drop the sig from the transaction, the block wouldn't validate, you wouldn't be able to prove an output spend came from that transaction, so that's not something we could do. But let's simplify the problem. What if we could redesign Bitcoin from scratch? What if you're designing an altcoin, there's really no reason why you would want to do this in Bitcoin. This is actually something we did in sidechain alpha.
 
 You would mark the signature data as special. Here indicated by green color on this slide. Everything but the green part goes into the hash of a transaction. The signature doesn't. It's just a piece of data that's still there, but we don't consider it part of the transaction.
- 
+
 This redesign would allow you to drop this data. For tampering puproses and other reasons, you still want to make blocks commit to the signatures. A node relaying a fully-valid block with all signatures in it that are all valid, would relay it to another node, and just change the signature data. This node does not see that the block is being tampered with. The node would see an invalid block, and you don't want that to happen. So we still need to make the blocks themselves, not the transactions, but the block commits to the signatures of transactions.
 
 One way to do this is change the merkle tree that blocks have to commit to the transaction IDs, into two-sided tree where one side refers to the transaction IDs without the signatures, and then there's a second tree, exactly constructed in the same way, but it contains the hashes of the witnesses/signatures.
@@ -93,7 +93,6 @@ Q: So you said moving the signature data outside the UTXO set..
 
 A: It's never been in the UTXO set. But we are now able to treat the part of the transaction, which has no impact on the UTXO set. The signature data has never had an impact, but it was bounded to the rest of the transaction, which did have an effect on the UTXO set.
 
----
 
     18:36 < aj> oh, huh, i guess segwit moving signatures out of the block means that the size of cross-chain witness proof things (what are they called?) for pegged sidechains is kind-of irrelevant...
 
@@ -112,7 +111,7 @@ previously:
 
 somewhat simplified explanation of segwit <https://www.reddit.com/r/Bitcoin/comments/3th0py/sipa_proposes_a_fork_of_mainnet_enabling/cx6cunn>
 
-more follow-up and questions: <http://gnusha.org/bitcoin-wizards/2015-12-07.log> and some [roadmap](http://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-December/011865.html), also aj [1](http://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-December/011868.html) [2](http://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-December/011869.html)
+more follow-up and questions: <http://gnusha.org/bitcoin-wizards/2015-12-07.log> and some [roadmap](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-December/011865.html), also aj [1](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-December/011868.html) [2](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2015-December/011869.html)
 
 reddit follow-up: [1](https://www.reddit.com/r/Bitcoin/comments/3vql34/segregated_witness_and_its_impact_on_scalability/) [2](https://www.reddit.com/r/Bitcoin/comments/3th0py/sipa_proposes_a_fork_of_mainnet_enabling/cx6cunn) [3](https://www.reddit.com/r/Bitcoin/comments/3vs524/eli5_segregated_witness/cxqerrv) [4](https://www.reddit.com/r/Bitcoin/comments/3vurqp/greg_maxwell_capacity_increases_for_the_bitcoin/)
 

@@ -1,19 +1,11 @@
 ---
-title: 51 percent mining attack
+title: "Should we be more concerned by the prospect of a 51 percent mining attack?"
 speakers: ['Greg Maxwell']
 transcript_by: Michael Folkson
 tags: ['mining', 'security']
 date: 2019-10-04
+media: https://www.reddit.com/r/Bitcoin/comments/ddddfl/comment/f2g9e7b/?utm_source=share&utm_medium=web2x&context=3
 ---
-
-Should we be more concerned by the prospect of a 51 percent mining attack?
-
-Location: Reddit
-
-<https://www.reddit.com/r/Bitcoin/comments/ddddfl/comment/f2g9e7b/?utm_source=share&utm_medium=web2x&context=3>
-
-# Should we be more concerned by the prospect of a 51 percent mining attack?
-
 I think questions like this are ultimately the result of a fundamental lack of understanding about what Bitcoin is doing.
 
 The problem Bitcoin is attempting to solve is getting everyone everywhere to agree on the same stable history of transactions. This is necessary because in order to prevent users from printing money from nothing the system must have a rule that you can't spend a given coin more than once-- like I have a dollar then pay both alice and bob that dollar, creating a dollar out of nothing.
@@ -32,8 +24,8 @@ I think people obsess far too much about "51%"-- it has some kind of attractive 
 A far bigger risk to Bitcoin is that the public using it won't understand, won't care, and won't protect the decentralization properties that make it valuable over centralized alternatives in the first place. ... a risk we can see playing out constantly in the billion dollar market caps of totally centralized systems. The ability demonstrated by system with fake decentralization to arbitrarily change the rules out from under users is far more concerning than the risk that an expensive attack could allow some theft in the case of over-eagerly finalized transactions.
 
 There is really two classes of things that that colluding majority can do:
-	•	They can undermine the stability of consensus, e.g. making continual reorgs against the tip (though to do this successfully over a realistic time frame they need a lot more than 51%). After some brief transition where some active transactors might get robbed by the attackers before everyone realizes the consensus isn't stable, this turns into a network wide denial of service attack that essentially delays all use of the system. 
-	•	They could censor particular users or uses, creating an immediate denial of service against those users/uses. 
+	•	They can undermine the stability of consensus, e.g. making continual reorgs against the tip (though to do this successfully over a realistic time frame they need a lot more than 51%). After some brief transition where some active transactors might get robbed by the attackers before everyone realizes the consensus isn't stable, this turns into a network wide denial of service attack that essentially delays all use of the system.
+	•	They could censor particular users or uses, creating an immediate denial of service against those users/uses.
 The first of these is less concerning to me because since it effects everyone and makes the system much less usable it's pretty clear that the users will resolve it somehow, e.g. potentially with a nuclear option of firing the miners by changing the work function. Because of the inevitability of that outcome it makes the whole attack fairly unattractive from a game theory perspective.
 
 I find the second more concerning because since it targets a subset it may be much harder to gain the political will to undertake a costly or risky fix, especially if the targets are somehow politically or legally disadvantaged.

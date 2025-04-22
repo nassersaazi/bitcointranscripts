@@ -1,12 +1,12 @@
 ---
 title: Bip101 Block Propagation Data From Testnet
 transcript_by: Bryan Bishop
-categories: ['conference']
-tags: ['forks']
-speakers: ['Jonathan Tomim']
+tags:
+  - soft-fork-activation
+speakers:
+  - Jonathan Tomim
 media: https://www.youtube.com/watch?v=ivgxcEOyWNs&t=2h25m20s
 ---
-
 I am a bitcoin miner. I am a C++ programmer and a scientist. I will be going pretty fast. I have a lot of stuff to cover. Bare with me.
 
 My perspective on this is that scaling bitcoin is an engineer problem. My favorite proposal for how to scale bitcoin is [bip101](https://github.com/bitcoin/bips/blob/master/bip-0101.mediawiki). It's over a 20-year time span. This will give us time to implement fixes to get Bitcoin to a large level. A hard-fork to increase the block size limit is hard, and soft-forks make it easier to decrease, that is to increase it is, so we should have a hard-fork once or at least infrequent and then do progressive short-term limitations when we run into scaling limitations.
@@ -69,7 +69,7 @@ Q: How big are the UTXO set size were you testing with?
 
 A: The blockchain was 3.3 GB when we started. I didn't look at the UTXO set size in particular. Sorry, I can't answer that question. I can look into it.
 
-Q: It seemed like your blocks were transmitting always from Lond. What about data from when blocks were generated in China? I am concerned about the internet issue is something that circles China. 
+Q: It seemed like your blocks were transmitting always from Lond. What about data from when blocks were generated in China? I am concerned about the internet issue is something that circles China.
 
 A: I don't have data from mining in China yet. However, I can do a similar test, which I actually prepared for, where I downloaded the file from a Chinese node. Pick a city. Okay, Shenzhen. This isn't here, this is all in my notes. Oh, we lost the screen. Shanghai is getting packet loss from the Great Firewall. Washington had 512 kilobytes/sec. Tokyo 812 kilobytes/second. Singapore still waiting, hasn't even started now. 980 kilobytes for London. We were using teamviewer to show my laptop.
 

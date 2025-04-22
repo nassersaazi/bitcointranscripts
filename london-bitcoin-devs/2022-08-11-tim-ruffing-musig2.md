@@ -1,38 +1,32 @@
 ---
 title: MuSig2
 transcript_by: Michael Folkson
-categories: ['meetup']
-tags: ['schnorr', 'multisig']
-speakers: ['Tim Ruffing']
+tags:
+  - musig
+speakers:
+  - Tim Ruffing
 date: 2022-08-11
 media: https://www.youtube.com/watch?v=TpyK_ayKlj0
 ---
-
-Topic: MuSig2
-
-Location: London Bitcoin Devs
-
-Date: August 11th 2022
-
 Reading list: <https://gist.github.com/michaelfolkson/5bfffa71a93426b57d518b09ebd0998c>
 
-# Introduction
+## Introduction
 
-Michael Folkson (MF): This is a Socratic Seminar, we are going to be discussing MuSig2 and we’ll move onto adjacent topics such as FROST and libsecp256k1 later. We have a few people on the call including Tim (Ruffing). If you want to do short intros, you don’t have to, for the people on the call. 
+Michael Folkson (MF): This is a Socratic Seminar, we are going to be discussing MuSig2 and we’ll move onto adjacent topics such as FROST and libsecp256k1 later. We have a few people on the call including Tim (Ruffing). If you want to do short intros, you don’t have to, for the people on the call.
 
 Tim Ruffing (TR): Hi. Thanks for having me. I am Tim Ruffing, my work is at Blockstream. I am an author of the MuSig2 paper, I guess that’s why I’m here. In general I work on cryptography for Bitcoin and cryptocurrencies and in a more broad sense applied crypto. I am also a maintainer of the libsecp256k1 library which is a Bitcoin Core cryptographic library for elliptic curve operations.
 
-Elizabeth Crites (EC): My name is Elizabeth Crites, I am a postdoc at the University of Edinburgh. I work on very similar research to Tim. I also work on the FROST threshold signature scheme which I’m sure we’ll talk about at some point during this. 
+Elizabeth Crites (EC): My name is Elizabeth Crites, I am a postdoc at the University of Edinburgh. I work on very similar research to Tim. I also work on the FROST threshold signature scheme which I’m sure we’ll talk about at some point during this.
 
 Nigel Sharp (NS): I’m Nigel Sharp, bit of a newbie software engineer, Bitcoiner, just listening in on the call in case I have any questions.
 
 Grant (G): Hi, I’m Grant. Excited about MuSig. I may have a couple of questions later on but I think I’ll mostly just observe for the moment.
 
-# A retrospective look at BIP340
+## A retrospective look at BIP340
 
 MF: This is a BitDevs, there are a lot of BitDevs all over the world in various cities. There is a list [here](https://bitdevs.org/cities). This is going to be a bit different in that we’re going to focus on one particular topic and libsecp256k1. Also we are going to assume a base level of knowledge from a [Socratic](https://btctranscripts.com/london-bitcoin-devs/2020-06-16-socratic-seminar-bip-schnorr/) and [presentation](https://btctranscripts.com/london-bitcoin-devs/2020-06-17-tim-ruffing-schnorr-multisig/) Tim did a couple of years ago. This isn’t going to be an intro. If you are looking for an intro this won’t be for you. But anyone is free to listen in and participate and ask questions. The Socratic we did with Tim, this is before [BIP340](https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki) was finalized, this was before Taproot was activated, this was before Schnorr signatures were online and active on the Bitcoin blockchain. First question, BIP340 related, has anything in BIP340 been a disappointment or problematic or caused any challenges with any future work? It is always very difficult to finalize and put something in stone, put it in the consensus rules forever especially when you don’t know what is coming down the pipeline in terms of other projects and other protocols, other designs. The only thing I’ve seen, you can tell me if there is anything else, is the x-only pubkeys for the TLUV opcode. The choice of x-only pubkeys in BIP340, that has had a complication for a covenant opcode in its current design. That’s the only thing I’ve heard from BIP340 that has posed any kind of disappointment.
 
-TR: I think that is the main point here. BIP340 is the Schnorr signature BIP for Bitcoin. One special thing about the way we use Schnorr signatures in Bitcoin is that we have x-only public keys. What this means, if you look at an elliptic curve point, there is a x and a y coordinate, there are two coordinates. If you have a x coordinate you can almost compute the y coordinate up to the sign basically. For each valid x coordinate there are two valid y coordinates. That means if you want to represent that point or store it or make a public key out of it you need the x coordinate and you need 1 bit of the y coordinate. What we actually did in the BIP here, in our design, we dropped that additional bit. The reason is that it is often encoded in a full byte and maybe you can’t even get around this. This saves 1 byte in the end, brings down our public keys from 33 bytes to 32 bytes. This sounds good, it is just 1 byte or 1 bit but I think it is a good idea to squeeze out every saving we can because space is very sparse. This was the idea. There’s a nice [blog post](https://medium.com/blockstream/reducing-bitcoin-transaction-sizes-with-x-only-pubkeys-f86476af05d7) by Jonas (Nick). This blog post explains that this is actually not a loss of security. Even though we drop a bit in the public key it doesn’t mean that the scheme becomes a bit less secure, it is actually the same security. That is explained in this blog post. Though it turns out that if you just want to do Schnorr signatures on Bitcoin with normal transactions then it is pretty cool, it saves space. If you want to do more complex things, for example MuSig or more complex crypto then this bit is always a little pain in the ass. We can always get around this but whenever we do advanced stuff like tweaking keys, a lot of schemes involve tweaking keys, even Taproot itself involves tweaking, MuSig2 has key aggregation and so on. You always have to implicitly remember that bit because it is not explicitly there. You have to implicitly remember it sometimes. This makes specifications annoying. I don’t think it is a problem for security but for engineering it is certainly annoying. In hindsight it is not clear if we would make that decision again. I still think it is good because we save a byte but you can also say the increased engineering complexity is not worth it. At this point I can understand both points of view. You mentioned one [thing](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-July/020663.html) on the bitcoin-dev mailing list. There was a [suggestion](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-September/019419.html) by AJ (Towns) for a new Bitcoin opcode that would allow a lot of advanced constructions, for example coinpools. You have a shared UTXO between a lot of people, the fact that we don’t have the sign of the elliptic curve point of the public key would have created a problem there. You need the sign when you want to do arithmetic. If you want to add a point to another point, `A+B`, then if `B` is actually `-B` then it doesn’t work out. You are not adding, you are subtracting, this is the basic problem there. There were some ugly workarounds proposed. I recently came up with a [better workaround](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-July/020663.html). It is still ugly but not as ugly as the other ones. It is just an annoying thing. If we could always deal with this x only key and still save space but sometimes they are annoying. The only hope is that we can hide all the annoying things in BIPs and specifications and libraries so that actual protocol developers don’t need to care too much about this.
+TR: I think that is the main point here. BIP340 is the Schnorr signature BIP for Bitcoin. One special thing about the way we use Schnorr signatures in Bitcoin is that we have x-only public keys. What this means, if you look at an elliptic curve point, there is a x and a y coordinate, there are two coordinates. If you have a x coordinate you can almost compute the y coordinate up to the sign basically. For each valid x coordinate there are two valid y coordinates. That means if you want to represent that point or store it or make a public key out of it you need the x coordinate and you need 1 bit of the y coordinate. What we actually did in the BIP here, in our design, we dropped that additional bit. The reason is that it is often encoded in a full byte and maybe you can’t even get around this. This saves 1 byte in the end, brings down our public keys from 33 bytes to 32 bytes. This sounds good, it is just 1 byte or 1 bit but I think it is a good idea to squeeze out every saving we can because space is very sparse. This was the idea. There’s a nice [blog post](https://medium.com/blockstream/reducing-bitcoin-transaction-sizes-with-x-only-pubkeys-f86476af05d7) by Jonas (Nick). This blog post explains that this is actually not a loss of security. Even though we drop a bit in the public key it doesn’t mean that the scheme becomes a bit less secure, it is actually the same security. That is explained in this blog post. Though it turns out that if you just want to do Schnorr signatures on Bitcoin with normal transactions then it is pretty cool, it saves space. If you want to do more complex things, for example MuSig or more complex crypto then this bit is always a little pain in the ass. We can always get around this but whenever we do advanced stuff like tweaking keys, a lot of schemes involve tweaking keys, even Taproot itself involves tweaking, MuSig2 has key aggregation and so on. You always have to implicitly remember that bit because it is not explicitly there. You have to implicitly remember it sometimes. This makes specifications annoying. I don’t think it is a problem for security but for engineering it is certainly annoying. In hindsight it is not clear if we would make that decision again. I still think it is good because we save a byte but you can also say the increased engineering complexity is not worth it. At this point I can understand both points of view. You mentioned one [thing](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-July/020663.html) on the bitcoin-dev mailing list. There was a [suggestion](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-September/019419.html) by AJ (Towns) for a new Bitcoin opcode that would allow a lot of advanced constructions, for example coinpools. You have a shared UTXO between a lot of people, the fact that we don’t have the sign of the elliptic curve point of the public key would have created a problem there. You need the sign when you want to do arithmetic. If you want to add a point to another point, `A+B`, then if `B` is actually `-B` then it doesn’t work out. You are not adding, you are subtracting, this is the basic problem there. There were some ugly workarounds proposed. I recently came up with a [better workaround](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2022-July/020663.html). It is still ugly but not as ugly as the other ones. It is just an annoying thing. If we could always deal with this x only key and still save space but sometimes they are annoying. The only hope is that we can hide all the annoying things in BIPs and specifications and libraries so that actual protocol developers don’t need to care too much about this.
 
 MF: I think coinpool was using this particular covenant opcode but it is a complication for the covenant opcode TAPLEAF_UPDATE_VERIFY. Then various things might use it if that was ever activated on the Bitcoin blockchain. That’s the only thing that has come to light regarding BIP340.
 
@@ -40,7 +34,7 @@ TR: Mostly. The other thing, it is not really a pain but we are working on a tin
 
 MF: That’s BIP340. I thought we’d cover that because before it wasn’t active onchain and now it is. Hopefully that will be the only thing that comes to light regarding BIP340 frustrations.
 
-# MuSig2 history
+## MuSig2 history
 
 MF: Let’s go onto MuSig2. I have a bunch of links, a couple of talks from [Tim Ruffing](https://btctranscripts.com/realworldcrypto/2021/2021-01-12-tim-ruffing-musig2/) and [Jonas Nick](https://btctranscripts.com/iacr/2021-08-16-jonas-nick-musig2/). I thought I’d start with a basic history. The first paper I found was [this](https://cseweb.ucsd.edu/~mihir/papers/multisignatures.pdf) from Bellare, Neven (2006). They tried to do multisig, I guess key aggregation multisig. I don’t know what the motivation is for this. Before Bitcoin and before blockchains what were people using multisig for? What use cases were there where there were so many signatures flying around? Not only that but also wanting to have multiple people signing? And then on top of that wanting to aggregate it to get the privacy or space benefit? Is it just a case of academics pursuing their interests and not really worrying about the use case? Or is there a use case out there where people wanted this?
 
@@ -68,7 +62,7 @@ EC: They had the first idea to avoid the rogue key attacks.
 
 TR: You can still have rogue key attacks even if you don’t have key aggregation.
 
-EC: I think that was the thing, how to aggregate keys without rogue key attacks. 
+EC: I think that was the thing, how to aggregate keys without rogue key attacks.
 
 TR: Let’s have a look at the syntax.
 
@@ -114,9 +108,9 @@ TR: They started with a 2 round scheme, this 2 round scheme wasn’t secure. The
 
 MF: Was there a particular number of signing sessions that you need to be able to have to get that forgery? Or was that a number plucked out of anywhere?
 
-TR: You need a handful but the security goes down pretty quickly. There are two answers. With the first attack this covered, with Wagner’s algorithm, there it goes down pretty quickly. I never implemented it but around 100 I think it is doable in practice. If you have a powerful machine with a lot of computation power maybe much lower, I don’t know. Recently there was a new paper that improves this attack to super low computation. There you specifically need 256. If you have 256 sessions, or maybe 257 or something like this, then the attack is suddenly super simple. You could probably do it on your pocket calculator if you spend half a hour. 
+TR: You need a handful but the security goes down pretty quickly. There are two answers. With the first attack this covered, with Wagner’s algorithm, there it goes down pretty quickly. I never implemented it but around 100 I think it is doable in practice. If you have a powerful machine with a lot of computation power maybe much lower, I don’t know. Recently there was a new paper that improves this attack to super low computation. There you specifically need 256. If you have 256 sessions, or maybe 257 or something like this, then the attack is suddenly super simple. You could probably do it on your pocket calculator if you spend half a hour.
 
-# Different security models for security proofs
+## Different security models for security proofs
 
 Jonas Nick on OMDL: <https://btctranscripts.com/iacr/2021-08-16-jonas-nick-musig2/#one-more-dl-omdl>
 
@@ -134,7 +128,7 @@ TR: I think it is separate. If you have longer messages, you need to hash the me
 
 EC: We use this notion of this idealized something, right. In the case of random oracle model we are saying a hash function should output something random. So we are going to pretend that it is a truly random function. What that means is that when we idealize a hash function in that way it says “If you are going to break MuSig you have to do something really clever with the explicit hash function that is instantiated”. Your proof of security says “The only way you are going to break this scheme is if you do something clever with the hash”. It kind of eliminates all other attack vectors and just creates that one. So far nobody has been able to do anything with the hash. It just eliminates every other weakness except for that which is the explicit instantiation that is used. That’s my two cents.
 
-TR: That’s a good way to say it. When you think about a theorem, if OMDL holds this is one thing and if you model the hash function as a random oracle then the scheme is secure. This gives you a recipe to break MuSig2 in a sense. Either you try to break OMDL or you try to break the hash function. As long as those things hold up you can be sure that MuSig2 is secure. You also asked about AGM, the Algebraic Group Model. This is another idealized model. Here we are not talking about the hash function, we are talking about the group arithmetic. All this discrete logarithm stuff takes place in an algebraic group. This is now very confusing when I use this terminology. When I say “algebraic group” I just mean group in algebra terminology, a mathematical object. But when cryptographers say “algebraic” they mean something different. Here we restrict the attacker in some other way. We kind of say “The only way to compute in this group is to add elements”. If you have a public key `A` and a public key `B` the only thing you can do with this is compute `A+B` or maybe `A-B` or `A+2B` or something like this. You can’t come up with your own public key except drawing a new `x` and computing `g^x`. You can do this point addition, you can add public keys, and you can generate new public keys by drawing the exponent and raising `g` the generator to the exponent. But we assume that this is the only way you can come up with group elements. This is again very helpful in the proof. When I talked about the random oracle I said the attacker needs to show his inputs to the hash function. Here in the Algebraic Group Model the attacker needs to show us how it came up with group elements. For example what could happen is that we send the attacker the public key `g^x` and ask it to produce a signature on this public key that we haven’t created before. That would be a break of MuSig2. Now the attacker could say “Here is a signature” and the signature will contain a group element and then the attacker needs to tell us how it computed this element. This is an implication from what I said earlier. If you assume the only thing the attacker can do is add those things up then this is basically equivalent to forcing the attacker to tell us how it came up with these elements, give us the numbers basically. This again helps in the security proof. It mostly has theory implications only I would say as long as this model really holds up. It was a special thing with MuSig2 that we had two variants: the variant with the Algebraic Group Model where we need this stronger assumption is a little bit more efficient. 
+TR: That’s a good way to say it. When you think about a theorem, if OMDL holds this is one thing and if you model the hash function as a random oracle then the scheme is secure. This gives you a recipe to break MuSig2 in a sense. Either you try to break OMDL or you try to break the hash function. As long as those things hold up you can be sure that MuSig2 is secure. You also asked about AGM, the Algebraic Group Model. This is another idealized model. Here we are not talking about the hash function, we are talking about the group arithmetic. All this discrete logarithm stuff takes place in an algebraic group. This is now very confusing when I use this terminology. When I say “algebraic group” I just mean group in algebra terminology, a mathematical object. But when cryptographers say “algebraic” they mean something different. Here we restrict the attacker in some other way. We kind of say “The only way to compute in this group is to add elements”. If you have a public key `A` and a public key `B` the only thing you can do with this is compute `A+B` or maybe `A-B` or `A+2B` or something like this. You can’t come up with your own public key except drawing a new `x` and computing `g^x`. You can do this point addition, you can add public keys, and you can generate new public keys by drawing the exponent and raising `g` the generator to the exponent. But we assume that this is the only way you can come up with group elements. This is again very helpful in the proof. When I talked about the random oracle I said the attacker needs to show his inputs to the hash function. Here in the Algebraic Group Model the attacker needs to show us how it came up with group elements. For example what could happen is that we send the attacker the public key `g^x` and ask it to produce a signature on this public key that we haven’t created before. That would be a break of MuSig2. Now the attacker could say “Here is a signature” and the signature will contain a group element and then the attacker needs to tell us how it computed this element. This is an implication from what I said earlier. If you assume the only thing the attacker can do is add those things up then this is basically equivalent to forcing the attacker to tell us how it came up with these elements, give us the numbers basically. This again helps in the security proof. It mostly has theory implications only I would say as long as this model really holds up. It was a special thing with MuSig2 that we had two variants: the variant with the Algebraic Group Model where we need this stronger assumption is a little bit more efficient.
 
 MF: There isn’t neat strictly increasing levels of security right? It is just different paradigms? Because the Algebraic One More Discrete Logarithm (AOMDL) is weaker security than One More Discrete Logarithm. But how does One More Discrete Logarithm compare to AGM and ROM?
 
@@ -152,7 +146,7 @@ EC: The term “weaker” and “stronger” means different things in different
 
 TR: And it even confuses cryptographers. When you look at algebraic OMDL it is a weaker assumption than OMDL, slightly weaker which is slightly better. We have to assume less which gives us a stronger result. Even cryptographers are trained to believe whenever the hear the word “algebraic” it is something bad because now we have to make all these assumptions. In this specific case we are actually making a weaker assumption, that is why we stressed it so much in the paper. Whenever we say algebraic OMDL we have a relative clause that says it is actually weaker than OMDL to remind the reader that what we’re doing is actually a good thing and not a bad thing.
 
-# MuSig-DN
+## MuSig-DN
 
 Paper: <https://eprint.iacr.org/2020/1057.pdf>
 
@@ -170,7 +164,7 @@ TR: Maybe there are some use cases but it is much more difficult. From the pract
 
 MF: So MuSig-DN is better for the randomness requirement and stateless signing. It is just that those benefits aren’t obvious in terms of why someone would really want those benefits for a particular use case.
 
-TR: The randomness and the statelessness, they are very related if you look at the details. MuSig-DN has two rounds. When I say it is stateless it basically means that in one round I send a message, I receive a message from the others and then I send another message. That is why it is two rounds. When I say it has state the signer needs to remember secret state from the first round to the second round. This can be problematic because weird things could happen while you remember state. For example you could run in a VM, you do the second round and then someone resets the VM to the point where you did the first round but not the second round and you still have the state. You do another second round and you lost again. The basic idea is if we remove the requirement to have randomness then everything will be deterministic. That is why we don’t have to remember state. When we come to the second round we could just recompute the first round again as it is deterministic. We can redo the first round again so we don’t need to remember it because there is no randomness involved. That is why having no state and requiring no randomness are pretty related in the end. I think the motivation is we have seen random number generators fail in practice. Even in Bitcoin, people lost their coins due to this. It is a real problem but for multisignatures we currently don’t have a good way to avoid the randomness requirement. From an engineering point of view it could make more sense to focus on really getting the randomness right instead of trying to work around it. 
+TR: The randomness and the statelessness, they are very related if you look at the details. MuSig-DN has two rounds. When I say it is stateless it basically means that in one round I send a message, I receive a message from the others and then I send another message. That is why it is two rounds. When I say it has state the signer needs to remember secret state from the first round to the second round. This can be problematic because weird things could happen while you remember state. For example you could run in a VM, you do the second round and then someone resets the VM to the point where you did the first round but not the second round and you still have the state. You do another second round and you lost again. The basic idea is if we remove the requirement to have randomness then everything will be deterministic. That is why we don’t have to remember state. When we come to the second round we could just recompute the first round again as it is deterministic. We can redo the first round again so we don’t need to remember it because there is no randomness involved. That is why having no state and requiring no randomness are pretty related in the end. I think the motivation is we have seen random number generators fail in practice. Even in Bitcoin, people lost their coins due to this. It is a real problem but for multisignatures we currently don’t have a good way to avoid the randomness requirement. From an engineering point of view it could make more sense to focus on really getting the randomness right instead of trying to work around it.
 
 MF: Anything to add on MuSig-DN Elizabeth?
 
@@ -178,7 +172,7 @@ EC: No, I’d just say that I think there are some niche use cases for having a 
 
 TR: We thought about using the core of it in other protocols and problems but we haven’t really found anything.
 
-# MuSig2
+## MuSig2
 
 MuSig2 paper: <https://eprint.iacr.org/2020/1261.pdf>
 
@@ -192,9 +186,9 @@ MF: And this is strictly better than fixed MuSig1? MuSig-DN did still have some 
 
 TR: Yeah. In this [blog post](https://medium.com/blockstream/musig2-simple-two-round-schnorr-multisignatures-bf9582e99295) we argue that MuSig2 is strictly better than MuSig1. It has the same safety requirements, it just gets rid of one round. You can precompute the first round without having a message which is another big advantage. A 2-of-2 Lightning channel may in the future use MuSig2, what you can do is do the first round already before you know what to sign. Then when a message arrives that you want to sign, a payment in Lightning that you want to forward or want to make, only then can you do the second round. Because you already did the first round the second round is just one more message. It is particularly useful for these 2-of-2 things. Then the transaction arrives at one endpoint of the Lightning channel, this endpoint can complete the second round of MuSig2 for that particular transaction, compute something locally, and then just send it over to the other endpoint. The other endpoint will do its part of the second round and at this point it already has the full signature. It is really just one message that goes over the network. That’s why you could call this semi-interactive or half-interactive. It is still interactive because you have two rounds but you can alway precompute this first round. Whenever you really want to sign a message then it is just one more message over the network. That’s why we believe MuSig2 is strictly better than MuSig1 in practice. But compared to MuSig-DN it is really hard to compare. MuSig-DN has this additional feature, it doesn’t need randomness. If you do the zero knowledge proof correctly and implement all of this correctly you definitely remove that footgun of needing randomness. This is a safety advantage in a sense. But on the other hand it is slower, it has more implementation complexity and you can’t do this precomputation trick so it is always two rounds. You can’t precompute the first round. These would be drawbacks. But as I said it has these safety improvements, you can’t say that one is strictly better than the other. But in practice what people want is MuSig2 because it is simpler and we like simple protocols. Not only because they are easier to implement but they are also easier to implement correctly. Crypto is hard to implement so whenever we have a simple protocol we have much less potential to screw it up.
 
-MF: And on the security proofs you’ve proved the security of MuSig2 in the random oracle model. “We prove the security of MuSig2 in the random oracle model, and the security of a more efficient variant in the combination of the random oracle and the algebraic group model. Both our proofs rely on a weaker variant of the OMDL assumption”. Maybe I’ll never understand that. MuSig2, any other comments on MuSig2? 
+MF: And on the security proofs you’ve proved the security of MuSig2 in the random oracle model. “We prove the security of MuSig2 in the random oracle model, and the security of a more efficient variant in the combination of the random oracle and the algebraic group model. Both our proofs rely on a weaker variant of the OMDL assumption”. Maybe I’ll never understand that. MuSig2, any other comments on MuSig2?
 
-# SpeedyMuSig and proofs of possession
+## SpeedyMuSig and proofs of possession
 
 Paper that references SpeedyMuSig: <https://eprint.iacr.org/2021/1375.pdf>
 
@@ -234,7 +228,7 @@ MF: I saw a [presentation](https://btctranscripts.com/mit-bitcoin-expo/mit-bitco
 
 TR: I don’t know what he had in mind there. I don’t know this proposal but at the moment I can’t think of how BIP32 would interact with recovery.
 
-MF: A question for Andrew then. Comments on YouTube, we’ve got one saying “Bellare Neven needed all keys for verifying”, maybe. 
+MF: A question for Andrew then. Comments on YouTube, we’ve got one saying “Bellare Neven needed all keys for verifying”, maybe.
 
 TR: Right, we covered that.
 
@@ -242,15 +236,15 @@ Adam Gibson (AG): We have pubkey recovery in pre-Taproot already because we have
 
 TR: We can’t do it in Schnorr, at least not with BIP340.
 
-# MuSig2 draft BIP
+## MuSig2 draft BIP
 
 MuSig2 draft BIP: <https://github.com/jonasnick/bips/blob/musig2/bip-musig2.mediawiki>
 
-MF: MuSig2 now has a draft BIP. 
+MF: MuSig2 now has a draft BIP.
 
 TR: I just updated it yesterday. Still a work in progress.
 
-MF: Can you talk a bit about what work still needs to be done? Why is it still a work in progress? If it was changed to be SpeedyMuSig that would be a significant change. 
+MF: Can you talk a bit about what work still needs to be done? Why is it still a work in progress? If it was changed to be SpeedyMuSig that would be a significant change.
 
 TR: That would be a significant change.
 
@@ -286,7 +280,7 @@ MF: And this is a new requirement because before with single signatures you are 
 
 TR: Yeah, right. That’s exactly the thing that MuSig-DN solves in a sense but by adding a lot of complexity. This is also a very, very important thing to know. People have tried to use this trick with the hash generating the nonce by hashing the secret key and the message for multisignatures. Don’t do this. If this was possible we would have added it to the BIP. But it is totally insecure. For years we told people when they implement signatures they should generate the nonce deterministically because this is way safer. This is true for ordinary single singer signatures. But funnily it is the exact opposite for multisignatures. This is really dangerous because we’ve seen people do this. We told them for years derive nonces deterministically and then they saw the multisignature proposal and said “Ok it is safer to derive nonces deterministically”. Now it is the other way round. It is strange but that is how it is. When you look at nonce generation here it has this note. “NonceGen must have access to a high quality random generator to draw an unbiased, uniformly random value rand”. We say it explicitly, you must not derive deterministically.
 
-# MuSig2 support in Lightning and hardware signers
+## MuSig2 support in Lightning and hardware signers
 
 MF: Is this going to be the biggest challenge? Everything seems to take years these days but assuming we get hardware signer support for MuSig2, the hardware signer would need to provide this randomness that it currently wouldn’t.
 
@@ -304,7 +298,7 @@ MF: It is merged but perhaps it is just an option, they aren’t actually using 
 
 AG: I know Laolu wrote an implementation of MuSig2 in the btcsuite golang backend but for sure it isn’t exactly final.
 
-# FROST
+## FROST
 
 FROST paper: <https://eprint.iacr.org/2020/852.pdf>
 
@@ -362,7 +356,7 @@ TR: Maybe one thing to mention here, a step back and to reiterate, threshold sch
 
 MF: The Bitcoin implementation of FROST uses MuSig key aggregation.
 
-TR: I think it does. Jesse said it is easier because then it is the same method, we could reuse some code. And it would be possible to do what he described there. Maybe you could start with a 3-of-3 setup and then downgrade it to a 2-of-3, something like this. Then it would make sense to start with the MuSig setup. When you start with the n-of-n thing you probably want to have the MuSig method. This was still an open point in this PR. He came up with this use case, I wasn’t really convinced that people want to do this in practice. Others maybe weren’t convinced either. I think we haven’t decided yet. At least in the Bitcoin world when you talk about this PR, it is much more work in progress than MuSig2. With MuSig2 we already have the BIP draft and it is almost finalized. Here we don’t even have a specification, we just have this draft PR which tries to implement it but without an explicit specification. It is worth mentioning that outside Bitcoin it is maybe the other way round. There is this IRTF proposal for FROST and there is nothing for multisignature. 
+TR: I think it does. Jesse said it is easier because then it is the same method, we could reuse some code. And it would be possible to do what he described there. Maybe you could start with a 3-of-3 setup and then downgrade it to a 2-of-3, something like this. Then it would make sense to start with the MuSig setup. When you start with the n-of-n thing you probably want to have the MuSig method. This was still an open point in this PR. He came up with this use case, I wasn’t really convinced that people want to do this in practice. Others maybe weren’t convinced either. I think we haven’t decided yet. At least in the Bitcoin world when you talk about this PR, it is much more work in progress than MuSig2. With MuSig2 we already have the BIP draft and it is almost finalized. Here we don’t even have a specification, we just have this draft PR which tries to implement it but without an explicit specification. It is worth mentioning that outside Bitcoin it is maybe the other way round. There is this IRTF proposal for FROST and there is nothing for multisignature.
 
 MF: So why is that? Given that MuSig is simpler. It is just that Elizabeth has done better speaking to the IRTF than the Bitcoin guys.
 
@@ -376,7 +370,7 @@ MF: Are there particular use cases that this IRTF standard is being geared towar
 
 TR: I really need to stress that we believe we can do this but we really don’t know. I could write down a scheme but I don’t know if it is secure. We’d need to prove it was secure and nobody has done that so far. I wouldn’t recommend using nested MuSig at the moment.
 
-# libsecp256k1 scope
+## libsecp256k1 scope
 
 MF: Let’s finish off with libsecp256k1. I don’t know which is priority. Finalizing the MuSig2 BIP or getting a API release out for libsecp256k1. What’s your current thinking, obviously there are other contributors, other reviewers, other maintainers, on how close we are to having a libsecp256k1 release and formal API?
 
@@ -398,7 +392,7 @@ MF: It is hard, there are a lot of grey areas here. You don’t know where to dr
 
 TR: Upstream, the discussion in libsecp256k1 is much more interesting in that respect. There we really have a community project. We want to have the things there that are relevant for Bitcoin I think. But of course our time is limited. In the libsecp256k1-zkp fork, it is a repo controlled by Blockstream, we could do whatever we want with this repo. That’s why we don’t care that much what we put in there but maybe we should care a little bit more and have a discussion on the upstream repo. Then it would be more meaningful for everybody.
 
-# Reusing code for future proposals (e.g. CISA)
+## Reusing code for future proposals (e.g. CISA)
 
 MF: There was some [discussion](https://github.com/ElementsProject/secp256k1-zkp/pull/120#issuecomment-759674484) here. You’ve discussed some cross input signature aggregation type proposals, you were on a [podcast](https://stephanlivera.com/episode/400/) recently talking about half signature aggregation. There are some things that can be reused. You are having to think “Not only is this code potentially being used in the use case that we’re coding it up for but it might be used in future”. It is not consensus so it is not cemented on the blockchain but I suppose you are trying to think ahead in making sure it is modular and a potential module could do the same function for both use cases, even long term things.
 
@@ -408,7 +402,7 @@ MF: It is not critically important. It is just a nice to have type thing. This l
 
 TR: When you are writing code you can think about future applications. It is probably good to think about but it might turn out in a month you want to do it differently. That’s how it works.
 
-# ROAST
+## ROAST
 
 ROAST paper: <https://eprint.iacr.org/2022/550.pdf>
 
@@ -452,7 +446,7 @@ MF: I’m assuming it still uses CHECKMULTISIG rather than CHECKSIGADD. The bene
 
 TR: I’d need to ask the Liquid engineers.
 
-# Q&A
+## Q&A
 
 Q - Back in MuSig land, in the [BIP](https://github.com/jonasnick/bips/blob/musig2/bip-musig2.mediawiki) there is a section called verify failed test cases and it provides some signatures. One of them exceeds the group size and it fails. One of them is the wrong signer and so it fails. And one of them is the wrong signature… why is that an important test to make?
 
@@ -460,9 +454,9 @@ A - In the test vector file, just yesterday we [converted](https://github.com/jo
 
 Q - For the negation is that multiplying the whole point by negative one (-1) for example or is that mirroring it on the other side of an axis. What does negation actually look like when it is performed?
 
-A - I’m not sure what exactly is negated in this test case but if you look at the Schnorr signature it has two components. It is a group element, a point on the curve, and it is a scalar. The scalar is in a sense an exponent, something like a secret key. You could negate either. BIP340 makes sure that no matter what you negate it will always be an invalid signature. But in general it is possible to negate the point or it is possible to negate the scalar. Look into the old ECDSA specification because this had this problem and you can see how the negation was ignored there. When you have a negation, you have a signature, you negate one of the components and you get another valid signature. 
+A - I’m not sure what exactly is negated in this test case but if you look at the Schnorr signature it has two components. It is a group element, a point on the curve, and it is a scalar. The scalar is in a sense an exponent, something like a secret key. You could negate either. BIP340 makes sure that no matter what you negate it will always be an invalid signature. But in general it is possible to negate the point or it is possible to negate the scalar. Look into the old ECDSA specification because this had this problem and you can see how the negation was ignored there. When you have a negation, you have a signature, you negate one of the components and you get another valid signature.
 
-MF: I went through the Schnorr test vectors a while back and Pieter [said](https://bitcoin.stackexchange.com/questions/99418/how-do-i-tweak-the-bip340-test-vectors-to-check-that-signature-verification-fail/) negating means taking the complement with the group order n. “The signature won’t be valid if you verify it using the negated message rather than the actual message used in the signature.” 
+MF: I went through the Schnorr test vectors a while back and Pieter [said](https://bitcoin.stackexchange.com/questions/99418/how-do-i-tweak-the-bip340-test-vectors-to-check-that-signature-verification-fail/) negating means taking the complement with the group order n. “The signature won’t be valid if you verify it using the negated message rather than the actual message used in the signature.”
 
 TR: This is negating the scalar, what Pieter is talking about.
 

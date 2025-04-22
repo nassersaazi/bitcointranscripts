@@ -1,24 +1,16 @@
 ---
 title: Socratic Seminar
 transcript_by: Michael Folkson
-categories: ['meetup']
-tags: ['multisig', 'mempool']
+tags:
+  - fee-management
+  - dual-funding
 date: 2020-05-19
 ---
-
-Name: Socratic Seminar
-
-Topic: Agenda in Google Doc below
-
-Location: Bitcoin Sydney (online)
-
-Video: No video posted online
-
 Google Doc of the resources discussed: https://docs.google.com/document/d/1hCTlQdt_dK6HerKNt0kl6X8HAeRh16VSAaEtrqcBvlw/
 
 The conversation has been anonymized by default to protect the identities of the participants. Those who have expressed a preference for their comments to be attributed are attributed. If you were a participant and would like your comments to be attributed please get in touch.
 
-# 0xB10C blog post on mempool observations
+## 0xB10C blog post on mempool observations
 
 https://b10c.me/mempool-observations/2-bitmex-broadcast-13-utc/
 
@@ -40,9 +32,9 @@ With the way the wallets react with this giant transaction in the mempool, they 
 
 I am not sure. Typically if you estimate fee rates you say “I want to be included in the next block or in the next 3 blocks. Or 10 blocks maybe.” If that is a constraint of your use case or your wallet then maybe that is the right reaction. If you want to pay as low fees as possible it is maybe not the correct reaction.
 
-It is a really great blog post. It strikes a nice balance between really going into the detail but actually explaining things in a way that is easy for the layman to understand. 
+It is a really great blog post. It strikes a nice balance between really going into the detail but actually explaining things in a way that is easy for the layman to understand.
 
-# Fabian Jahr blog post on “Where are the coins?”
+## Fabian Jahr blog post on “Where are the coins?”
 
 https://medium.com/okcoin-blog/btc-developer-asks-where-are-the-coins-8ea70b1734f4
 
@@ -50,9 +42,9 @@ I remember running a node for the first time and doing what it said in the tutor
 
 At what point did you come across the Pieter Wuille post?
 
-It was almost done. I had produced some bugs in my code. I was running the unclaimed miner reward code to get the exact number and make sure it really adds up 100 percent. The rest of the text was mostly written. It was great that I found it because I took this blog that I copied over from his stuff. I am not sure I would have found this information otherwise. I could have found in which blocks what went missing but Pieter at the time was maybe in contact with people to identify bugs from the miners. That was great and definitely helped me finish up much more quickly. 
+It was almost done. I had produced some bugs in my code. I was running the unclaimed miner reward code to get the exact number and make sure it really adds up 100 percent. The rest of the text was mostly written. It was great that I found it because I took this blog that I copied over from his stuff. I am not sure I would have found this information otherwise. I could have found in which blocks what went missing but Pieter at the time was maybe in contact with people to identify bugs from the miners. That was great and definitely helped me finish up much more quickly.
 
-I think it is a really cool post. 
+I think it is a really cool post.
 
 These are things Fabian that you stumbled across whilst contributing to Core right? This isn’t you using the Core wallet and thinking “I don’t how this works. I need to research this”?
 
@@ -62,19 +54,19 @@ I recall seeing some discussion where one OG on Twitter and Matt Corallo was tal
 
 With BIP 30 you have this messy solution where overriding blocks are hardcoded into the codebase. Is it possible at this point to actually fork back to an earlier block in 2010? Or these rules and other rules essentially add a checkpoint at some point after that?
 
-That’s what BIP 34 does. I don’t really remember how exactly that works. There are measures here but I am not exactly sure how it would play out if we would go back that far. There are a lot of comments above the [code](https://github.com/bitcoin/bitcoin/blob/b549cb1bd2cc4c6d7daeccdd06915bec590e90ca/src/validation.cpp#L2014). 
+That’s what BIP 34 does. I don’t really remember how exactly that works. There are measures here but I am not exactly sure how it would play out if we would go back that far. There are a lot of comments above the [code](https://github.com/bitcoin/bitcoin/blob/b549cb1bd2cc4c6d7daeccdd06915bec590e90ca/src/validation.cpp#L2014).
 
 It says we will enforce BIP 30 every time unless the height is one of these particular heights and the hash is these two particular blocks. If you do a re-org to as far as back as you like you won’t be able to do anything apart from those two blocks as violations of it.
 
 This rule applies to every block apart from these two blocks.
 
-# PTLCs (lightning-dev mailing list)
+## PTLCs (lightning-dev mailing list)
 
-https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-April/002647.html
+https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-April/002647.html
 
 This is the mailing list post from Nadav Kohen summarizing a lot of the different ideas about PTLCs.
 
-Nadav is keen on working on PTLCs now despite not having Schnorr. There is this discussion about whether it is worth it in the case of discreet log contracts where you have one version that doesn’t use adaptor signatures and you have the original one that uses some kind of Lightning construction where you have a penalty transaction. The adaptor signature one gets rid of the penalty. You have an oracle who is releasing a different secret key depending on the outcome of the bets. It is Liverpool versus Manchester. The oracle releases one secret key based on Liverpool winning, another one on Manchester wining and another one if they tie. It is really simple to do a bet on this kind of thing if you have the adaptor based one. What you do is you both put money into a joint output, if you don’t have Schnorr you use OP_CHECKMULTISIG. Then you put adaptors signatures on each of these outcomes, tie, one team wins, the other team wins. The point, I call it the encryption key, for the signature for each of those outcomes is the oracle’s point. If the oracle releases one secret key what it means is you can decrypt your adaptor signature, get the real signature, put that on the chain. Then you get the transaction which pays out to whoever gets money in that situation. Or if they tie both get money back for example. This is a really simple protocol. The one without adaptor signatures is pretty complicated. I was just pointing out in this mailing list post it is far preferable to have the adaptor one in this case. Even though the ECDSA adaptor signatures are not as elegant as Schnorr it would probably be easier to do that now than do what the original discreet log contract [paper](https://adiabat.github.io/dlc.pdf) suggests. 
+Nadav is keen on working on PTLCs now despite not having Schnorr. There is this discussion about whether it is worth it in the case of discreet log contracts where you have one version that doesn’t use adaptor signatures and you have the original one that uses some kind of Lightning construction where you have a penalty transaction. The adaptor signature one gets rid of the penalty. You have an oracle who is releasing a different secret key depending on the outcome of the bets. It is Liverpool versus Manchester. The oracle releases one secret key based on Liverpool winning, another one on Manchester wining and another one if they tie. It is really simple to do a bet on this kind of thing if you have the adaptor based one. What you do is you both put money into a joint output, if you don’t have Schnorr you use OP_CHECKMULTISIG. Then you put adaptors signatures on each of these outcomes, tie, one team wins, the other team wins. The point, I call it the encryption key, for the signature for each of those outcomes is the oracle’s point. If the oracle releases one secret key what it means is you can decrypt your adaptor signature, get the real signature, put that on the chain. Then you get the transaction which pays out to whoever gets money in that situation. Or if they tie both get money back for example. This is a really simple protocol. The one without adaptor signatures is pretty complicated. I was just pointing out in this mailing list post it is far preferable to have the adaptor one in this case. Even though the ECDSA adaptor signatures are not as elegant as Schnorr it would probably be easier to do that now than do what the original discreet log contract [paper](https://adiabat.github.io/dlc.pdf) suggests.
 
 Rust DLC stuff was worked on at the Lightning Hack Sprint?
 
@@ -82,25 +74,25 @@ Jonas, Nadav and the rest of the team worked on doing a PTLC. The latest one, th
 
 There was a question on IRC yesterday about a specific mailing list post on one party ECDSA. Are there different schemes on how to do adaptor like signatures with one party ECDSA?
 
-The short story is that Andrew Poelstra invented the adaptor signature. Then Pedro Moreno-Sanchez invented the ECDSA one. When he explained it he only explained it with a two party protocol. What I did is say we can simplify this to a single signer one. This doesn’t give you all the benefits but it makes far simpler and much more practical for use in Bitcoin today. That was that mailing list [post](https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-November/002316.html). It seems solid to me. There might be some minor things that might change but from a security perspective it passes all the things that I would look for. I implemented it myself and I made several mistakes. When I looked at whether Jonas Nick had made the same mistakes, he didn’t. He managed to do all that in a hackathon, very impressive.
+The short story is that Andrew Poelstra invented the adaptor signature. Then Pedro Moreno-Sanchez invented the ECDSA one. When he explained it he only explained it with a two party protocol. What I did is say we can simplify this to a single signer one. This doesn’t give you all the benefits but it makes far simpler and much more practical for use in Bitcoin today. That was that mailing list [post](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2019-November/002316.html). It seems solid to me. There might be some minor things that might change but from a security perspective it passes all the things that I would look for. I implemented it myself and I made several mistakes. When I looked at whether Jonas Nick had made the same mistakes, he didn’t. He managed to do all that in a hackathon, very impressive.
 
-# On the scalability issues of onboarding millions of LN clients (lightning-dev mailing list)
+## On the scalability issues of onboarding millions of LN clients (lightning-dev mailing list)
 
-https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-May/002678.html
+https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-May/002678.html
 
 Antoine Riard was asking the question of scalability, what happens with BIP 157 and the incentive for people to run a full node versus SPV or miner consensus takeover.
 
-I think the best summary of my thoughts on it in much better words than I could is John Newbery’s [answer](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-May/017823.html). These are valid concerns that Antoine is raising. On the other hand they are not specific to BIP 157. They are general concerns for light clients. BIP 157 is a better light client than we have before with bloom filters. As long as we accept that we will have light clients we should do BIP 157.
+I think the best summary of my thoughts on it in much better words than I could is John Newbery’s [answer](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-May/017823.html). These are valid concerns that Antoine is raising. On the other hand they are not specific to BIP 157. They are general concerns for light clients. BIP 157 is a better light client than we have before with bloom filters. As long as we accept that we will have light clients we should do BIP 157.
 
 This conversation happened on both the bitcoin-dev mailing list and lightning-dev mailing list.
 
 This sums up my feelings on it. There were a lot of messages but I would definitely recommend reading John’s one.
 
-The Luke Dashjr [post](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-May/017820.html) was referring back to some of Nicolas Dorier’s [arguments](https://medium.com/@nicolasdorier/neutrino-is-dangerous-for-my-self-sovereignty-18fac5bcdc25). He would rather people use an explorer wallet in his parlance, Samourai wallet or whatever, calling back to the provider as opposed to a SPV wallet. John’s comment addresses that at least somewhat. It is not specific to BIP 157.
+The Luke Dashjr [post](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-May/017820.html) was referring back to some of Nicolas Dorier’s [arguments](https://medium.com/@nicolasdorier/neutrino-is-dangerous-for-my-self-sovereignty-18fac5bcdc25). He would rather people use an explorer wallet in his parlance, Samourai wallet or whatever, calling back to the provider as opposed to a SPV wallet. John’s comment addresses that at least somewhat. It is not specific to BIP 157.
 
 The argument is really about do we want to make light clients not too good in order to disincentivize people to use them or do we not want to do that? It also comes down how do we believe the future will play out. That’s why I would recommend people to read Nicolas Dorier’s article and look at the arguments. It is important that we still think about these things. Maybe I am on the side of being a little more optimistic about the more future. That more people will run their own full nodes still or enough people. I think that is also because everyone will value their privacy will want to run a full node still. It is not like people will forget about that because there is a good light client. I honestly believe that we will have more full nodes. It is not like full nodes will stay at the same number because we have really good light clients.
 
-To reflect some of the views I saw elsewhere in the thread. [Richard Myers](https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-May/002702.html) is working on mesh networking and people trying to operate using Bitcoin who can’t run their own full node. If they are in a more developing world country and don’t have the same level of internet or accessibility of a home node they can call back to. Even there there are people working on different ideas. One guy in Africa just posted about how they are trying to use Raspiblitz as a set up with solar panels. That is a pretty cool idea as well.
+To reflect some of the views I saw elsewhere in the thread. [Richard Myers](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-May/002702.html) is working on mesh networking and people trying to operate using Bitcoin who can’t run their own full node. If they are in a more developing world country and don’t have the same level of internet or accessibility of a home node they can call back to. Even there there are people working on different ideas. One guy in Africa just posted about how they are trying to use Raspiblitz as a set up with solar panels. That is a pretty cool idea as well.
 
 This is the PGP model. When PGP first came out it was deliberately hard to use so you would have to read documentation so you wouldn’t use it insecurely. That was a terrible idea. It turns out that users who are not prepared to invest time, you scare off all these users. The idea that we should make it hard for them so they do the right thing, if you make it hard for them they will go and do something else. There is a whole graduation here. At the moment a full node is pretty heavy but this doesn’t necessarily have to be so. A full node is something that builds up its own its own UTXO set. At some stage it does need to download all the blocks. It doesn’t need to do so to start with. You could have a node that over time builds it up and becomes a full node for example, gradually catches up. Things like Blockstream’s satellite potentially help with that. Adding more points on the spectrum is helpful. This idea that if they are not doing things we like we should serve them badly hasn’t worked already. People using Electrum random peers and using them instead. If we’ve got a better way of doing it we should do it. I’ve always felt we should channel the Bitcoin block headers at least over the Lightning Network. The more sources of block headers we have the less chance you’ve got of being eclipsed and sybil attacked.
 
@@ -108,7 +100,7 @@ I recall some people were talking about the idea of fork detection. Maybe you mi
 
 There are certainly more things we can do. The truth is that people are running light clients today. I don’t think that is going to stop. If you really want to stop them work really hard on making a better full client than we have today.
 
-I also liked Laolu’s [post](https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-May/002685.html) too. You can leverage existing infrastructure to serve blocks. There was a discussion around how important is economic weight in the Bitcoin network and how easy would it be to try to takeover consensus and change to their fork of 22 million Bitcoin or whatever. 
+I also liked Laolu’s [post](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2020-May/002685.html) too. You can leverage existing infrastructure to serve blocks. There was a discussion around how important is economic weight in the Bitcoin network and how easy would it be to try to takeover consensus and change to their fork of 22 million Bitcoin or whatever.
 
 This was what happened with SegWit2x, aggressively going after the SPV wallets. They were like “We are going to carry all the SPV wallets with us”. It is a legitimate threat. There is an argument that if you have significant economic weight you should be running a full node, that is definitely true. But everyone with their little mobile phone with ten dollars on it is maybe not so important.
 
@@ -142,7 +134,7 @@ I see the argument and I think you’ve put it better than I’ve ever heard it 
 
 You are simplifying the argument. There are different constituents. Even though I agree that one set of constituents are the whales that hold Bitcoin or are buying lots of Bitcoin, if they are going to lose money because all the other constituents in the ecosystem say that chain isn’t Bitcoin then it doesn’t matter what they say. They either lose money or they go with the ecosystem majority. It is not as simple as saying one constituent has all the power. This is definitely not the case. There are four or five different constituents.
 
-They all have one thing in common. They are bidding for Bitcoin with US dollars or some other currency or goods. People who have Bitcoin do not get to decide what the real Bitcoin is because they are going to have both Bitcoin and the forked coin. They don’t get to decide which one is the real one. The guys who decide are the people who purchase it on exchanges. They are going to say which is the real one, we have a social consensus on which one is the real one. I see there could be an attack on it but I don’t see how light clients really are going to be the key to the malicious attack winning. 
+They all have one thing in common. They are bidding for Bitcoin with US dollars or some other currency or goods. People who have Bitcoin do not get to decide what the real Bitcoin is because they are going to have both Bitcoin and the forked coin. They don’t get to decide which one is the real one. The guys who decide are the people who purchase it on exchanges. They are going to say which is the real one, we have a social consensus on which one is the real one. I see there could be an attack on it but I don’t see how light clients really are going to be the key to the malicious attack winning.
 
 This is where I agree with you. I think it is not light client or full node. It is light client or custodial. Custodial are just as bad as light clients if not worse. Then you are fully trusting the exchange’s full node. You also only need one exchange full node to serve billions of users. If we can move people from custodial to light client I see that as an improvement. That is the comparison people don’t often make.
 
@@ -160,7 +152,7 @@ What are some of the ideas that would make it easier for people run their own fu
 
 The friends and family idea. That computer geek you know runs a full node for you which is second best to running your own. The idea of a node that slowly works its way backwards. It has a UTXO snapshot that it has to trust originally. Then it slowly works its way backwards and downloads blocks for however long it takes. Eventually it gets double ticked. It is like “I have actually verified. This is indeed the genuine UTXO set.” A few megabytes every ten minutes gets lost in the noise these days.
 
-That is related to the James O’Beirne [assumeutxo](https://github.com/jamesob/assumeutxo-docs/tree/master/proposal) idea. 
+That is related to the James O’Beirne [assumeutxo](https://github.com/jamesob/assumeutxo-docs/tree/master/proposal) idea.
 
 And UTXO set hashes that have been proposed in the past are pretty easy to validate. You can take your full node and you can check that this is the hash you should have at this block. You can spread that pretty widely to people who trust you and check that is something you’ve got as well. Creating a social consensus allows you to bootstrap really fast. I can grab that UTXO set from anywhere and slowly my node will work its way backwards. With some block compression and other tricks we can do that. The other issue is of course that there is a lot of load. If you serve an archived full node and serve old blocks you get slammed pretty hard with people grabbing blocks. I had a half serious proposal for adopt a block a while ago. Every light client would hold 16 blocks. They would advertise that and so you would be able to grab 16 blocks from here and 16 blocks from there. Rather than hammering these full nodes even light clients would hold a small number of blocks for you. You could do this thing where you would slowly wind your way backwards and validate your UTXO set. I think the effort is better put into making it easier to run a full node. If you don’t like light clients move the needle and introduce things that are closer to what you want in a full client. Work on that rather than trying to make a giant crater so that no one can have a light client. That is short term and long term a bad idea.
 
@@ -182,7 +174,7 @@ I am still a random person for them. Maybe they saw me once or twice at a confer
 
 This is where you need to have a ladder. It is much better people are going “I am connecting to this guy’s node. He is serving me filters” than none of the options apart from a full node are there and therefore I am just going to trust Coinbase or Kraken to deal with it. I am not going to worry about how my balance is being verified. The situation that you describe is superior to custodial. And it is a long journey. As long people understand what they are doing you can see in 5, 10 years they are like “I don’t want to trust this guy’s node anymore. I don’t want to have filters served from this guy’s node. I am going to run my own node.” You have given them a stepping stone towards running a full node that wouldn’t have been there if you had ditched all the superior light client options.
 
-# RFC: Rust code integration into Bitcoin Core
+## RFC: Rust code integration into Bitcoin Core
 
 https://github.com/bitcoin/bitcoin/issues/17090
 
@@ -224,11 +216,11 @@ It didn’t happen. You have a base of developers who are comfortable with a lan
 
 I thought there were people introducing some Rust things into the Linux kernel.
 
-We went through the whole wave of people adding modules in C++ as well. But Linux has an advantage. If Linus (Torvalds) decided he really liked Rust and it was the way forward he could drag everyone else with him. It is the benevolent dictator model. I can’t think of an open source project that has switched implementation languages and survived. I can’t think of many that have tried to switch implementation languages. The answer is generally if you are going to rewrite it is usually a different group that come along and rewrite it. 
+We went through the whole wave of people adding modules in C++ as well. But Linux has an advantage. If Linus (Torvalds) decided he really liked Rust and it was the way forward he could drag everyone else with him. It is the benevolent dictator model. I can’t think of an open source project that has switched implementation languages and survived. I can’t think of many that have tried to switch implementation languages. The answer is generally if you are going to rewrite it is usually a different group that come along and rewrite it.
 
 What about making a fresh one starting from scratch in Rust?
 
-There is rust-bitcoin. 
+There is rust-bitcoin.
 
 It is just missing a community of maintainers.
 
@@ -248,7 +240,7 @@ We haven’t talked much about the promise of Rust. Rust is really exciting. Def
 
 If we had managed to have a Core dev meetup earlier this year, we didn’t because it got cancelled, I’m sure that would have been one of the things very much discussed in person. We’ll wait and see.
 
-# Dual funding in c-lightning
+## Dual funding in c-lightning
 
 https://github.com/ElementsProject/lightning/pull/3418
 
@@ -268,25 +260,25 @@ They haven’t implemented dual funding.
 
 They have implemented PSBT support.
 
-PSBT support itself is actually pretty easy to do. You can already do PSBT today in c-lightning as a plugin. It wasn’t in the core. You would build a PSBT based on the information the core would give you. That works. You have been able to use hardware wallets with c-lightning since before the last lnd release. It wasn’t very polished. This will bring it to a level of polish where we can recommend people use it. Rather than telling people they need to string these pieces together to get it to work. The PSBT itself, we are using libwally. We import libwally, pretty easy. 
+PSBT support itself is actually pretty easy to do. You can already do PSBT today in c-lightning as a plugin. It wasn’t in the core. You would build a PSBT based on the information the core would give you. That works. You have been able to use hardware wallets with c-lightning since before the last lnd release. It wasn’t very polished. This will bring it to a level of polish where we can recommend people use it. Rather than telling people they need to string these pieces together to get it to work. The PSBT itself, we are using libwally. We import libwally, pretty easy.
 
 Would PSBT would become part of the Lightning spec at that point?
 
-No. We let you add arbitrary outputs but we don’t need the full PSBT for that. You just tell it the output. As long as you have got the bits that we need that opens the channel and our outputs go where we expect we let you put whatever stuff you want in the funding transaction. If there is something wrong with it it won’t get mined. That is always true. You could put a valid input and then double spend that input. We always need to handle the case where the opening transaction doesn’t work for some reason. We might as well let you use anything. Just give us the output script, we don’t need the full PSBT flexibility. There is some caution with allowing arbitrary PSBTs. Other than generally having a large attack surface it would be a requirement that you understand the PSBT format and we are not ready to go that far. It is quite easy. “Here’s an output, here’s an output number” and then you can delete the number. The negotiation is quite complicated. “Add this output. Add this input. Add this output. Flip that input. Flip that output.” As long as at the end you’ve got all the stuff. That turns out to be important. If you are negotiating with multiple people you have to make sure everyone sees things in the same order. You have an index for each one and you specify that it will be in ascending order. That is required because if you are routing an output I might need to move my output out the way and put yours in there because that is what you expect. We all have to agree. It turns out to be quite a tricky problem. The actual specification of the inputs and outputs themselves is trivial so we haven’t use PSBT for that. The whole industry has been moving to PSBT because it solves a real problem. That problem is that there is metadata that you need to deal with a transaction that is not actually inside the transaction format that hits the blockchain. This is good, keep the minimum amount of stuff on the blockchain. It does create this higher hurdle for what we need to deal with. The lack of standardization has slowed down development. It is another thing you need to be aware of when you are developing a wallet or hardware wallet. PSBT really does fill that gap well. I expect to see in the future more people dealing with PSBTs. A Bitcoin tx is almost like an artifact that comes out of that. Everyone starts talking PSBTs and not talking transactions at all. 
+No. We let you add arbitrary outputs but we don’t need the full PSBT for that. You just tell it the output. As long as you have got the bits that we need that opens the channel and our outputs go where we expect we let you put whatever stuff you want in the funding transaction. If there is something wrong with it it won’t get mined. That is always true. You could put a valid input and then double spend that input. We always need to handle the case where the opening transaction doesn’t work for some reason. We might as well let you use anything. Just give us the output script, we don’t need the full PSBT flexibility. There is some caution with allowing arbitrary PSBTs. Other than generally having a large attack surface it would be a requirement that you understand the PSBT format and we are not ready to go that far. It is quite easy. “Here’s an output, here’s an output number” and then you can delete the number. The negotiation is quite complicated. “Add this output. Add this input. Add this output. Flip that input. Flip that output.” As long as at the end you’ve got all the stuff. That turns out to be important. If you are negotiating with multiple people you have to make sure everyone sees things in the same order. You have an index for each one and you specify that it will be in ascending order. That is required because if you are routing an output I might need to move my output out the way and put yours in there because that is what you expect. We all have to agree. It turns out to be quite a tricky problem. The actual specification of the inputs and outputs themselves is trivial so we haven’t use PSBT for that. The whole industry has been moving to PSBT because it solves a real problem. That problem is that there is metadata that you need to deal with a transaction that is not actually inside the transaction format that hits the blockchain. This is good, keep the minimum amount of stuff on the blockchain. It does create this higher hurdle for what we need to deal with. The lack of standardization has slowed down development. It is another thing you need to be aware of when you are developing a wallet or hardware wallet. PSBT really does fill that gap well. I expect to see in the future more people dealing with PSBTs. A Bitcoin tx is almost like an artifact that comes out of that. Everyone starts talking PSBTs and not talking transactions at all.
 
 In my recent [episode](https://stephanlivera.com/episode/168/) with Lisa (Neigut) we were talking about the script descriptors in Bitcoin Core. Would that be someone that comes into the Lightning wallet management as well so that you would have an output descriptor to say “This is the onchain wallet of my Lightning wallet.”?
 
-We would love to get out of the wallet game. PSBT to some extent lets us do that. PSBT gives us an interoperable layer so we can get rid of our internal wallet altogether and you can use whatever wallet you want. I think that is where we are headed. The main advantage of having normal wallets understand a little bit of Lightning is that you could theoretically import your Lightning seed and get them to scrape and dredge up your funds which would be cool. Then they need to understand some more templated script outputs. We haven’t seen demand for that yet. It is certainly something that we have talked about in the past. A salvage operation. If you constrain the CSV delay for example it gets a lot easier. Unfortunately for many of the outputs that you care about you can’t generate all from a seed, some of the information has to come from the peer. Unless you talk with the peer again you don’t know enough to even figure out what the script actually is. Some of them you can get, some of them are more difficult. 
+We would love to get out of the wallet game. PSBT to some extent lets us do that. PSBT gives us an interoperable layer so we can get rid of our internal wallet altogether and you can use whatever wallet you want. I think that is where we are headed. The main advantage of having normal wallets understand a little bit of Lightning is that you could theoretically import your Lightning seed and get them to scrape and dredge up your funds which would be cool. Then they need to understand some more templated script outputs. We haven’t seen demand for that yet. It is certainly something that we have talked about in the past. A salvage operation. If you constrain the CSV delay for example it gets a lot easier. Unfortunately for many of the outputs that you care about you can’t generate all from a seed, some of the information has to come from the peer. Unless you talk with the peer again you don’t know enough to even figure out what the script actually is. Some of them you can get, some of them are more difficult.
 
-I read Lisa’s initial mailing list [post](https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-November/001532.html). She wrote down it works. This is a protocol design question. Why is it add input, add output and not just one message which adds a bunch of inputs and outputs and then the other guy sends you a message with his inputs and outputs and you go from there?
+I read Lisa’s initial mailing list [post](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/lightning-dev/2018-November/001532.html). She wrote down it works. This is a protocol design question. Why is it add input, add output and not just one message which adds a bunch of inputs and outputs and then the other guy sends you a message with his inputs and outputs and you go from there?
 
 It has to be stateful anyway because you have to have multiple rounds. If you want to let them negotiate with multiple parties they are not going to know everything upfront. I send to Alice and Bob “Here’s things I want to add.” Then Alice sends me stuff. I have to mirror that and send it to Bob. We have to have multiple rounds. If we are going to have multiple rounds keep the protocol as simple as possible. Add, remove, delete. We don’t care about byte efficiency, there is not much efficiency to be gained. A simple protocol to just have “Add input, add input, add input” rather than “Add inputs” with a number n. It simplifies the protocol.
 
 I would have thought it would be harder to engineer if you are modifying your database and then you get another output coming in. Now maybe you have to do locking. I guess you have to do that anyway?
 
-The protocol ends up being an alternating protocol where you say “I have nothing further to add and I’m finished.” You end up ping ponging back and forth. It came out of this research on figuring out how to coordinate multiple of these at once. Not that we are planning to implement that but we wanted to make sure it was possible to do that. That does add some complexity to the protocol. The rule is you don’t check at the end. Obviously they need to have enough inputs to fund the channel that they’ve promised and stuff like that. But they might need to change an input and remove an UTXO and use a different one. Then they would delete one and add another. That is completely legal even though at some point it could be a transaction with zero inputs. It is only when it is finalized that you do all the checks. It is not that hard as long as it is carefully specified. Says he who hasn’t implemented it yet. That’s one of the reasons we implement it to see if it is a dumb idea.
+The protocol ends up being an alternating protocol where you say “I have nothing further to add and I’m finished.” You end up ping ponging back and forth. It came out of this research on figuring out how to coordinate multiple of these at once. Not that we are planning to implement that but we wanted to make sure it was possible to do that. That does add some complexity to the protocol. The rule is you don’t check at the end. Obviously they need to have enough inputs to fund the channel that they’ve promised and stuff like that. But they might need to change an input and remove a UTXO and use a different one. Then they would delete one and add another. That is completely legal even though at some point it could be a transaction with zero inputs. It is only when it is finalized that you do all the checks. It is not that hard as long as it is carefully specified. Says he who hasn’t implemented it yet. That’s one of the reasons we implement it to see if it is a dumb idea.
 
-# Bitcoin Core MacOS functional tests failing intermittently
+## Bitcoin Core MacOS functional tests failing intermittently
 
 https://github.com/bitcoin/bitcoin/issues/18794
 
@@ -296,29 +288,29 @@ Two elements. One, an update on the state of functional tests in Core. The other
 
 I think we have got the functional tests fairly nailed down on Mac OS now. Especially over the past 18-24 months Mac OS has turned into a horrible operating system to use for a lot of stuff we are doing. It comes pre-installed with lots of really old versions of tools like make 3.8. It has got Apple clang by default that is a version of some upstream LLVM clang with a bunch of Apple stuff hacked in. We spent a lot of time working around in our build system. There were issues with the fuzzers as well. I patched some of those. That was linking issues. Or the alternative to throw away Apple clang and use a proper LLVM clang 10 or whatever is the latest release. It works now. I don’t think our docs are entirely correct. There are a few command line flags, there is a flag in there telling people to disable the AS assembly optimizations. I don’t think that is required for Mac OS specifically for any reason. That will work but if you want to do a lot of fuzzing or have something that continuously runs a lot of the functional and unit tests for Core spin up a Linux instance somewhere preferably a recent Ubuntu 20 or Debian 10/11. Run them on there instead. On the CI more generally, we have obviously used Travis for a long time with sometimes good success, other times worse success. I think Marco (Falke) has got to the point where he got fed up with Travis and has really genericized a lot of our CI infrastructure so you can run it wherever you want. I know he runs it on Cirrus and something else as well regularly. He has a btc_nightly [repo](https://github.com/MarcoFalke/btc_nightly) with scripts for doing that that you can fork and use as well. Continual issues with Travis with certain builds running out of disk space. We reported this 4 or 5 months ago and we still haven’t got answers about why it happens. Maybe we will migrate to something else. Anytime it comes up, do we pay for something else and where are we going to migrate to? We don’t want to end up on something worse than what we have currently have.
 
-# Modern soft fork activation
+## Modern soft fork activation
 
 https://twitter.com/LukeDashjr/status/1260598347322265600?s=20
 
 This one was on soft fork deployment.
 
-We discussed this last month. AJ and Matt Corallo put up mailing list [posts](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-January/017547.html) on soft fork activation. We knew that Luke Dashjr and others have strong views. This was asking what his view is. I think we are going to need a new BIP which will be BIP 8 updated to be BIP 9 and BIP 148 but I haven’t looked into how that compares to what Matt and AJ were discussing on the mailing list.
+We discussed this last month. AJ and Matt Corallo put up mailing list [posts](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-January/017547.html) on soft fork activation. We knew that Luke Dashjr and others have strong views. This was asking what his view is. I think we are going to need a new BIP which will be BIP 8 updated to be BIP 9 and BIP 148 but I haven’t looked into how that compares to what Matt and AJ were discussing on the mailing list.
 
-What was discussed on the mailing list at the start of the year was as Luke says was BIP 9 plus BIP 149. BIP 149 was going to be the SegWit activation which expires in November, we’ll give it a couple of months and then we’ll do a new activation in January 2018 I guess that will last a year. There will be signaling but at the end of that year whether the signaling works or not it will just activate. It divides it up into two periods. You’ve got the first period which is regular BIP 9 and the second period is essentially the same thing again but at the end it succeeds no matter what. The difference between that and BIP 148 is what miners have to do. What we actually had happen was before the 12 months of SegWit’s initial signaling ended we said “For this particular period starting around August miners have to signal for SegWit. If they don’t this hopefully economic majority of full nodes will drop their blocks so that they will be losing money.” Because they are all signaling for it and we’ve got this long timeframe it will activate no matter what. It will all be great. The difference is mostly BIP 148 got it working in a shorter timeframe because we didn’t need to have to start it again in January but it also forced the miners to have this panic “We might be losing money. How do we coordinate?” That was BIP 91 that allowed them to coordinate. The difference is that BIP 148 we know has worked at least once. BIP 149 is similar to how stuff was activated in the early days like P2SH. But we don’t know 100 percent it will work but it is less risk for miners at least. 
+What was discussed on the mailing list at the start of the year was as Luke says was BIP 9 plus BIP 149. BIP 149 was going to be the SegWit activation which expires in November, we’ll give it a couple of months and then we’ll do a new activation in January 2018 I guess that will last a year. There will be signaling but at the end of that year whether the signaling works or not it will just activate. It divides it up into two periods. You’ve got the first period which is regular BIP 9 and the second period is essentially the same thing again but at the end it succeeds no matter what. The difference between that and BIP 148 is what miners have to do. What we actually had happen was before the 12 months of SegWit’s initial signaling ended we said “For this particular period starting around August miners have to signal for SegWit. If they don’t this hopefully economic majority of full nodes will drop their blocks so that they will be losing money.” Because they are all signaling for it and we’ve got this long timeframe it will activate no matter what. It will all be great. The difference is mostly BIP 148 got it working in a shorter timeframe because we didn’t need to have to start it again in January but it also forced the miners to have this panic “We might be losing money. How do we coordinate?” That was BIP 91 that allowed them to coordinate. The difference is that BIP 148 we know has worked at least once. BIP 149 is similar to how stuff was activated in the early days like P2SH. But we don’t know 100 percent it will work but it is less risk for miners at least.
 
 The contrasting approaches are how quickly it gets pushed through and how much opportunity miners are given to flag that they are happy with the change?
 
-In both cases miners can flag they are happy with it pretty quickly. It is just how quickly everyone else can respond if miners aren’t happy with it for stupid reasons. 
+In both cases miners can flag they are happy with it pretty quickly. It is just how quickly everyone else can respond if miners aren’t happy with it for stupid reasons.
 
 If miners dragged their heels or they don’t want to proceed with it one method is more forcing?
 
 Yes. I don’t think there is any reason we can’t be prepared to do both. Set it up so that we’ll have this one year and this other year and at the end of two years it will definitely be activated as long as it seems sensible. If it is taking too long we can have the emergency and do the exact same thing we did with BIP 148 and force signaling earlier. They are not necessarily incompatible ideas either.
 
-# AltNet, a pluggable framework for alternative transports
+## AltNet, a pluggable framework for alternative transports
 
 https://github.com/bitcoin/bitcoin/pull/18988
 
-We have this one on AltNet from Antoine Riard. 
+We have this one on AltNet from Antoine Riard.
 
 There were 2 PRs he opened all at once. One is this AltNet framework and there is this other watchdog PR. One of was Marco’s comments was that we can have these drivers but he hasn’t thought about all the trade-offs. It seems beneficial if add-ons can be attached and removed during runtime as well as developed independently of the Bitcoin Core development process. I definitely agree that if we are going to be building these drivers that has to happen outside of the Bitcoin Core repository. As far as loading and unloading plugins at runtime goes definitely not a fan of that idea.
 
@@ -336,7 +328,7 @@ What benefits do you see from this? Would it enable different methods of communi
 
 I would have to think about it more and how it is going to be implemented. How does this AltNet play together with the main actual net. I don’t have a model in my head right now how that would work. I would need to think about it.
 
-# secp256kfun
+## secp256kfun
 
 https://github.com/LLFourn/secp256kfun
 
@@ -344,5 +336,5 @@ I have released this library called secp256kfun. It is for doing experimental cr
 
 This is for playing around as a toy implementation and can be used for educational reasons too. A stepping stone to understanding what is going on in the actual secp256k1 library.
 
-I think that is a strong point for it. There is an Examples folder and I implemented BIP 340 in a very few lines of code. It really helps you get an idea of how Schnorr signatures work or ECDSA signatures work because you aren’t forced to deal with these low level details. But at the same time you are not missing anything. You are not hacking around anything. You are doing the way you are meant to do it. As a teaching tool of how this cryptography works, it is pretty good. And for doing research quickly. We have been talking about Rust a lot. As a researcher I don’t want to go down into C and implement cryptography using libsecp, this C library. I am not very good at C. I do know Rust pretty well and there is a lot less work that goes into an implementation in Rust. Especially if you are willing to cut corners and are not paranoid about security. Just for a demonstration or getting benchmarks for your paper or getting a basic implementation to demonstrate your idea. That is what it is there for. 
+I think that is a strong point for it. There is an Examples folder and I implemented BIP 340 in a very few lines of code. It really helps you get an idea of how Schnorr signatures work or ECDSA signatures work because you aren’t forced to deal with these low level details. But at the same time you are not missing anything. You are not hacking around anything. You are doing the way you are meant to do it. As a teaching tool of how this cryptography works, it is pretty good. And for doing research quickly. We have been talking about Rust a lot. As a researcher I don’t want to go down into C and implement cryptography using libsecp, this C library. I am not very good at C. I do know Rust pretty well and there is a lot less work that goes into an implementation in Rust. Especially if you are willing to cut corners and are not paranoid about security. Just for a demonstration or getting benchmarks for your paper or getting a basic implementation to demonstrate your idea. That is what it is there for.
 

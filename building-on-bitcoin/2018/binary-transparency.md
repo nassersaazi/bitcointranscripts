@@ -1,13 +1,11 @@
 ---
-title: Binary Transparency
+title: Contours for Binary Transparency
 transcript_by: Bryan Bishop
-categories: ['conference']
-speakers: ['Mustafa Al-Bassam']
+speakers:
+  - Mustafa Al-Bassam
 date: 2018-07-03
+media: https://www.youtube.com/watch?v=59Igv-zQE7Y
 ---
-
-Contours for binary transparency
-
 <https://twitter.com/kanzure/status/1014167797205815297>
 
 I am going to talk about binary transparency. What is it? Let's suppose that you have an android phone or iphone and you download some software from the app store or Google Play. How do you know that the apk or that software that you're being given is the same piece of software that is being given to everyone else and google or apple hasn't specifically given you a bad version of that software because they were threatened or compelled to do so in a court order or because their keys were compromised?
@@ -58,4 +56,4 @@ To implement this with the debian package repositories, there were about ~1.7 te
 
 <https://github.com/musalbas/contour>
 
-Q: What about custom builds for everyone? You would need formal proof of software behavior, tied to the particular build. 
+Q: What about custom builds for everyone? You would need formal proof of software behavior, tied to the particular build.

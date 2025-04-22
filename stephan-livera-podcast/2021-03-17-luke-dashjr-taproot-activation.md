@@ -1,27 +1,23 @@
 ---
-title: Taproot Activation 
+title: How Bitcoin UASF went down, Taproot LOT=true, Speedy Trial, Small Blocks
 transcript_by: Stephan Livera
-categories: ['podcast']
-tags: ['taproot', 'soft fork']
-speakers: ['Luke Dashjr']
+tags:
+  - taproot
+  - soft-fork-activation
+speakers:
+  - Luke Dashjr
 date: 2021-03-17
 media: https://stephanlivera.com/episode/260/
 ---
+Luke Dashjr arguments against LOT=false: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018498.html
 
-Topic: How Bitcoin UASF went down, Taproot LOT=true, Speedy Trial, Small Blocks
+T1-T6 and F1-F6 arguments for LOT=true and LOT=false: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018380.html
 
-Location: Stephan Livera Podcast
-
-
-Luke Dashjr arguments against LOT=false: https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018498.html
-
-T1-T6 and F1-F6 arguments for LOT=true and LOT=false: https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018380.html
-
-F7 argument for LOT=false: https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018415.html
+F7 argument for LOT=false: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018415.html
 
 Transcript by: Stephan Livera Edited by: Michael Folkson
 
-# Intro
+## Intro
 
 Stephan Livera (SL): Luke, welcome to the show.
 
@@ -31,7 +27,7 @@ SL: So, Luke for listeners who are unfamiliar, maybe you could take a minute and
 
 LD: I first learned about Bitcoin back at the end of 2010, it was a new year’s party and I’ve been contributing since about a week later. So I recently got past the decade mark.
 
-# Bitcoin Knots
+## Bitcoin Knots
 
 GitHub org: https://github.com/bitcoinknots
 
@@ -41,7 +37,7 @@ SL: So I know you have done a lot of different things in the Bitcoin world, and 
 
 LD: [Bitcoin Knots](https://bitcoinknots.org/) is pretty much a product of the same development process that creates Bitcoin Core but it doesn’t have as onerous review requirements for things to be merged. And it also preserves some features that have been removed from the mainline Core such as the transaction priority, coin age and all that.
 
-# History of SegWit activation
+## History of SegWit activation
 
 SL: Okay, great. I know you have been developing in Bitcoin Core for a while and there are certain things that you’ve helped progress. I believe it was your suggestion that enabled SegWit to be done as a soft fork as well. So maybe it’d be good to also dive into some of the different views on how SegWit got activated, because I think looking back now there are different visions of how exactly SegWit was activated in the Bitcoin network looking back to 2017. So perhaps if you want to set the scene in terms of how you viewed the lead up to 2017? As I understand there were multiple attempts to raise the block size at that time, there was XT and Unlimited and a few others. Can you spell out for us your view on what that looked like leading up to 2017?
 
@@ -79,7 +75,7 @@ SL: In your view was it important that for example, Bitfinex had a B1X token and
 
 LD: At the end of the day it would have had the same outcome. I’m not going to say it didn’t matter at all. Obviously it helped get us there quicker. It made it clear before the fact that it wasn’t going anywhere, which I guess caused them to give up early. But at the end of the day the users are the final rule on what the protocol is. So it’s not like it would have succeeded without a futures market involved.
 
-# Economic majority concept
+## Economic majority concept
 
 SL: Of course. I think another important topic to bring up here is the concept of economic majority. It is one thing for people to spin up a node and not actually transacting, not receiving Bitcoin. That act of receiving Bitcoin and saying “Yes I recognize this as valid Bitcoins” or “No these are not valid Bitcoins.” In that act they are helping in some sense influence the rules of the network. And so I guess the argument from the people who believe that it was not UASF that did it might say “Ok there might just have been a few people on Twitter but they were not actually the economic majority. The economic majority would have been actors like Coinbase and other big exchanges.” What would you say to that line of thinking?
 
@@ -109,13 +105,13 @@ SL: You’re right there. Are there any other points around SegWit and 2017 that
 
 LD: I’m trying to think. I’m not sure that there was too much else.
 
-# Taproot activation
+## Taproot activation
 
 SL: So let’s move on to Taproot now. We’ve got this new soft fork that most people want. There’s been no serious sustained objections to it. Can you spell out your thoughts on how Taproot activation has gone so far?
 
-LD: We had three, maybe four [meetings](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-January/018370.html) a month or two ago. Turnout wasn’t that great, only a hundred people or so showed up for them. At the end of the day we came to consensus on pretty much everything except for the one lockinontimeout (LOT) [parameter](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018425.html). Since then a bunch of people have started throwing out completely new ideas. It is great to discuss them but I think they should be saved for the next soft fork. We’ve already got near consensus on Taproot activation, might as well just go forward with that. There’s not consensus on lockinontimeout but there’s enough community support to enforce it. I think we should just move forward with that how it is and we can do something different next time if there’s a better idea that comes around. Right now that is the least risky option on the table.
+LD: We had three, maybe four [meetings](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-January/018370.html) a month or two ago. Turnout wasn’t that great, only a hundred people or so showed up for them. At the end of the day we came to consensus on pretty much everything except for the one lockinontimeout (LOT) [parameter](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018425.html). Since then a bunch of people have started throwing out completely new ideas. It is great to discuss them but I think they should be saved for the next soft fork. We’ve already got near consensus on Taproot activation, might as well just go forward with that. There’s not consensus on lockinontimeout but there’s enough community support to enforce it. I think we should just move forward with that how it is and we can do something different next time if there’s a better idea that comes around. Right now that is the least risky option on the table.
 
-SL: With lockinontimeout there’s been a lot of discussion back and forth about true or false. And other ideas proposed such as just straight flag day activation or this other idea of [Speedy Trial](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-March/018583.html). Could you outline some of the differences between those different approaches?
+SL: With lockinontimeout there’s been a lot of discussion back and forth about true or false. And other ideas proposed such as just straight flag day activation or this other idea of [Speedy Trial](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-March/018583.html). Could you outline some of the differences between those different approaches?
 
 LD: The lockintimeout=true is essentially what we ended up having to do with SegWit. It gives a full year to the miners so they can collaborate cooperatively and protect the network while it’s being activated early. If the miners don’t do that for whatever reason, at the end it activates. If we were to set lockinontimeout=false we essentially undo that bug fix and give miners control again. It would be like reintroducing the inflation bug that was fixed not so long ago. It doesn’t really make sense to do that. At the end of the day it is a lot less secure. You don’t really want to be running it as an economic actor so you would logically want to run lockinontimeout=true. Therefore a lot of economic actors are likely to run it true. In most of the polls I’ve seen most of the community seems to want true. As far as a flag day, that’s essentially the same thing as lockinontimeout=true except that it doesn’t have the ability for miners to activate it early. So we’d have to wait the whole 18 months for it to activate and it doesn’t have any signaling. At the end of the day we don’t really know if it activated or if the miners are just not mining stuff that violates Taproot which is the difference of whether it is centralized or decentralized verification. It is economic majority still, that will matter for the enforcement, but you want to be able to say “This chain has Taproot activated.” You don’t want it to be an opinion. I say Taproot is activated, you say it isn’t. Who’s to say which one of us is right? Without a signal on the chain we’re both in a limbo where we’re both saying the same thing about the same chain and there’s no clear objective answer to that question, is Taproot activated.
 
@@ -127,7 +123,7 @@ SL: Of course not.
 
 LD: Kind of a nonsensical argument.
 
-# Devs propose, miners activate, users override
+## Devs propose, miners activate, users override
 
 Rusty Russell blog post: https://rusty.ozlabs.org/?p=628
 
@@ -135,7 +131,7 @@ SL: Some people make this argument that you’ve got developers, you’ve got mi
 
 LD: There’s no point to it though. LOT=true gives them the whole year to signal on their own. If they do then there’s no difference whatsoever between the two. The only question is do they have the ability to refuse to collaborate? And if they refuse to collaborate does that essentially cancel the soft fork? There’s no reason to ever do false. If they collaborate great, then it works. If they don’t collaborate then it works as well.
 
-# The prospect of a bug in the Taproot implementation
+## The prospect of a bug in the Taproot implementation
 
 SL: Another reason I’ve heard to have LOT=false is if let’s say in this activation period, there is a bug found and coordinating the stoppage of the soft fork is easier in a LOT=false scenario than if we were to go with LOT=true as default. What’s your thoughts on that?
 
@@ -153,25 +149,25 @@ SL: And so either way we are reliant on there being enough eyes on the code, eno
 
 LD: You would hope so. But regardless, what we do with legitimate soft forks has no influence on that scenario.
 
-# Bitcoin Core releasing LOT=false and UASF releasing LOT=true
+## Bitcoin Core releasing LOT=false and UASF releasing LOT=true
 
-Luke Dashjr on why LOT=false shouldn’t be used: https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018498.html
+Luke Dashjr on why LOT=false shouldn’t be used: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018498.html
 
-T1-T6 and F1-F6 arguments for LOT=true and LOT=false: https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018380.html
+T1-T6 and F1-F6 arguments for LOT=true and LOT=false: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018380.html
 
-F7 argument for LOT=false: https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018415.html
+F7 argument for LOT=false: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018415.html
 
 SL: The other argument I have heard is if Bitcoin Core were to release a client with LOT=false and another contingent of developers and users who want to go out and do similar to the UASF and release an alternate client with LOT=true. The average user can’t review all the Bitcoin code and they would now have to decide whether they want to run this alternate client that does include LOT=true. So what are your thoughts on that aspect?
 
-LD: That’s no riskier than running the one with LOT=false. LOT=false for other reasons doesn’t come to a coherent view of consensus. It will not be very useful to people who are on the LOT=false client. For that reason, I think Core releasing LOT=false would actually be an abdication of duties towards users. Obviously Bitcoin Core, there’s this expectation that it’s going to follow what the users want and be safe to use. LOT=false is simply [not safe](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018498.html) to use.
+LD: That’s no riskier than running the one with LOT=false. LOT=false for other reasons doesn’t come to a coherent view of consensus. It will not be very useful to people who are on the LOT=false client. For that reason, I think Core releasing LOT=false would actually be an abdication of duties towards users. Obviously Bitcoin Core, there’s this expectation that it’s going to follow what the users want and be safe to use. LOT=false is simply [not safe](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-February/018498.html) to use.
 
-# Dealing with unlikely chain splits
+## Dealing with unlikely chain splits
 
 SL: There’s also this discussion on the code in Bitcoin Core dealing with chain splits. People have points like “If there were to be a chain split at that time how would Bitcoin Core deal with the peer-to-peer ramifications of finding other peers who are on the same chain you are on and stuff like that?” Could you outline any thoughts on that aspect of it? I guess that’s also why in your view is LOT=true is the way to proceed with this.
 
 LD: LOT=true minimizes any risk of chain splits. That only happens if the miners are malicious at that point. But if they are, they could be again, they could be malicious tomorrow and cause problems. In any case Bitcoin Core can definitely improve on its handling of such miner attacks but it’s not really related to Taproot or lockinontimeout or any of that. It’s a general issue that could be improved but there’s no reason to link it to lockinontimeout or any of this.
 
-# Miner signaling threshold
+## Miner signaling threshold
 
 SL: in terms of the minor signaling ratio or percentage. 95 percent is the current threshold as I understand. What’s your thought on that level and what sort of scenarios could happen if the hash power were to be evenly split? If it wasn’t just one or two blocks before everyone figures out this is the correct chain and this is what we’re going with?
 
@@ -185,9 +181,9 @@ SL: Let’s say if somebody had not upgraded at that point, there wouldn’t be 
 
 LD: After the full year you’re no longer relying on that assumption. The miners, if they were to produce an invalid block, then everyone’s expected to use their own full node to reject that block no matter how much work that chain has.
 
-# Speedy Trial
+## Speedy Trial
 
-Speedy Trial proposal: https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-March/018583.html
+Speedy Trial proposal: https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2021-March/018583.html
 
 Speedy Trial support: https://gist.github.com/michaelfolkson/92899f27f1ab30aa2ebee82314f8fe7f
 
@@ -199,7 +195,7 @@ SL: So I presume then you’re also in favor of Speedy Trial in that case and yo
 
 LD: I think it’s still important that we move forward with the LOT=true. If Speedy Trial manages to preempt it that’s ok too. It’s not really an alternative as much as another way that the miners could activate before the deadline.
 
-# BIP 8
+## BIP 8
 
 https://github.com/bitcoin/bips/blob/master/bip-0008.mediawiki
 
@@ -211,7 +207,7 @@ SL: If you had to think about what is the most likely outcome at this point, wha
 
 LD: Considering all the miner support for Taproot I’m guessing that Speedy Trial might succeed. But if it doesn’t that’s fine. If people have to switch to a so called Bitcoin Core with Taproot added that’s ok. It might actually be better than if Bitcoin Core were to release in the main line release because then it’s the users even more explicitly acting. I think it really should have been released by now with the timeline that had been proposed by the meetings a month ago but I’m not about to do it myself. If there isn’t enough community support to actually get it done then it’s flawed and it’s not going to succeed in the first place. I’m happy to help the community if they want to move forward with this. But I do think it should happen sooner rather than later, we don’t want to wait until after Speedy Trial and then realize “Oh we should have done this 3 months ago.”
 
-# The importance of network consensus
+## The importance of network consensus
 
 Suhas Daftuar on Taproot activation and consensus changes: https://medium.com/@sdaftuar/on-taproot-activation-and-consensus-changes-in-bitcoin-5b3453e91c4e
 
@@ -227,7 +223,7 @@ SL: If I had to summarize your view it’s essentially we should be pursuing the
 
 LD: We can go ahead with Speedy Trial too, that doesn’t hurt. But I do think we should be doing both in parallel in case that doesn’t succeed.
 
-# Thoughts on the Bitcoin block size
+## Thoughts on the Bitcoin block size
 
 Luke Dashjr presentation on why block sizes should not be too big: https://diyhpl.us/wiki/transcripts/magicalcryptoconference/2019/why-block-sizes-should-not-be-too-big/
 
@@ -327,7 +323,7 @@ SL: So your purchasing power could be impacted. I guess it also is about if you 
 
 LD: Yes to a limited extent. Obviously it would be very bad if there was a handful of people that made up the whole economic majority.
 
-# Closing thoughts
+## Closing thoughts
 
 SL: It has been a very interesting discussion, Luke. I wonder if you’ve got any closing thoughts that you want to leave for the listeners?
 

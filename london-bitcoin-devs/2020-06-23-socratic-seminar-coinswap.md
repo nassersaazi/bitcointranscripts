@@ -1,19 +1,21 @@
 ---
 title: Socratic Seminar - Coinswap
 transcript_by: Michael Folkson
-categories: ['meetup']
-tags: ['privacy']
+tags:
+  - coinswap
+speakers:
+  - Adam Gibson
+  - Max Hillebrand
+  - Bob McElrath
+  - Ruben Somsen
 date: 2020-06-23
 media: https://www.youtube.com/watch?v=u7l6rP49hIA
 ---
-
-Location: London BitDevs (online)
-
 Pastebin of the resources discussed: https://pastebin.com/zbegGmb8
 
 The conversation has been anonymized by default to protect the identities of the participants. Those who have given permission for their comments to be attributed are attributed. If you were a participant and would like your comments to be attributed please get in touch.
 
-# Introductions
+## Introductions
 
 Michael Folkson (MF): This is London BitDevs, this is a Socratic Seminar. We had two events last week so it is great to see so many people on the call. I wondered if there would be lethargy after two last week. They were both great, videos and transcripts are up on BIP-Schnorr and Tim Ruffing’s presentation. Today is on CoinSwap. CoinSwap has been in the news because Chris Belcher has just got [funding](https://bitcoinmagazine.com/articles/the-human-rights-foundation-is-now-funding-bitcoin-privacy-development-starting-with-coinswap) from the Human Rights Foundation to work on it and there seems to be a lot of enthusiasm. At least a couple of people have been getting deep into CoinSwap. A couple of guys from Wasabi have been talking about CoinSwap at the [Wasabi Research Club](https://diyhpl.us/wiki/transcripts/wasabi-research-club/2020-06-15-coinswap/). This is being livestreamed. There is a call currently on Jitsi. Jitsi is free, open source and doesn’t collect your data. There will be a transcript but it can be anonymized and edited so please don’t let that put you off. This isn’t an exercise to find gotchas, this is purely for educational reasons. There is a [Pastebin](https://pastebin.com/zbegGmb8) up with the resources we will look at to bring structure to the discussion. As is normal we’ll do intros for anybody that wants to do an intro. There is a hand signal in the bottom left of your screen. If you want to do an intro, who you are, what interests or what understanding you have on CoinSwap. You don’t need to give your real name if you don’t want.
 
@@ -23,9 +25,9 @@ Max Hillebrand (MH): I am building on different Bitcoin tools, currently focusin
 
 Openoms (O): I am contributing to the RaspiBlitz project which is a Lightning Network node implementation and a lot else. I was recently working on integrating Joinmarket on it and I have been working on a Terminal based menu called JoininBox which is helping Joinmarket CLI usage. I am generally very enthusiastic about privacy on Bitcoin and excited about the CoinSwap proposal.
 
-Aviv Milner (AM): I am part of the Wasabi Research Club alongside Max. I am really into privacy. One thing I am really proud with, I got to interview Adam Gibson not long ago on elliptic curve math which was great. 
+Aviv Milner (AM): I am part of the Wasabi Research Club alongside Max. I am really into privacy. One thing I am really proud with, I got to interview Adam Gibson not long ago on elliptic curve math which was great.
 
-# What is an atomic swap?
+## What is an atomic swap?
 
 MF: As is custom in the previous Socratics we start from basics. I will throw out a basic question. What is an atomic swap? What is an atomic swap trying to achieve? This has been discussed for years in terms of swapping coins between chains. Can anybody explain a conventional atomic swap works?
 
@@ -39,13 +41,13 @@ MF: You could say the same about Lightning. It is basically the same assumptions
 
 AG: It is the same primitive involved in at least one aspect of the Lightning Network, similar.
 
-Bob McElrath (BM): There is a fun theorem that says atomic swaps are impossible without a trusted third party. We don’t get away from that theorem here. The two assets live on two different blockchains presumably so one solution is to put them both on the same blockchain which is the way all ERC20 swaps work. What Bitcoin does is use two interleaved timelocks, it is not actually atomic, it doesn’t happen at one point in time. One swap has to go forward and then the second one has to follow but there is a back out where if one half of the transaction doesn’t go through the other half can retrieve their coins and affect the non-execution of the swap. 
+Bob McElrath (BM): There is a fun theorem that says atomic swaps are impossible without a trusted third party. We don’t get away from that theorem here. The two assets live on two different blockchains presumably so one solution is to put them both on the same blockchain which is the way all ERC20 swaps work. What Bitcoin does is use two interleaved timelocks, it is not actually atomic, it doesn’t happen at one point in time. One swap has to go forward and then the second one has to follow but there is a back out where if one half of the transaction doesn’t go through the other half can retrieve their coins and affect the non-execution of the swap.
 
 MH: What theorem suggests they are impossible? Is there a difference between swapping between chains like Bitcoin and Litecoin and swapping on the same chain, Bitcoin UTXOs on the base layer?
 
 BM: If the base layer mediates the atomicity and the atomicity happens on the base layer, there are two transactions that are confirmed simultaneously and they can only be confirmed simultaneously. Then the base layer is enforcing atomicity. In order to do that you have to have a base layer that supports multiple assets. That is what is done on many of the blockchains out there that support sub-assets if you will and the whole DeFi thing.
 
-MF: Alex has shared in the chat a [resource](https://liquality.io/blog/hash-time-locked-contracts-htlcs-explained/) on understanding HTLCs. 
+MF: Alex has shared in the chat a [resource](https://liquality.io/blog/hash-time-locked-contracts-htlcs-explained/) on understanding HTLCs.
 
 At a high level HTLCs function as an escrow with a timelock. Once you put money into the escrow it will either execute successfully based on certain conditions or refund the payer once the timelock has expired. HTLCs are one of the primitives used on the Lightning Network. The potential for HTLCs seems boundless in my opinion.
 
@@ -59,7 +61,7 @@ BM: In the blockchain space we outsource the third party in a couple of differen
 
 AG: That is why I was saying at the beginning that the simplest way to understand it perhaps is the trade-off that we are trusting the blockchain clock is behaving as we intend it to in our timelocks. There is a lot you could say about this, we have said a lot of already.
 
-# Greg Maxwell Bitcointalk post (2013)
+## Greg Maxwell Bitcointalk post (2013)
 
 https://bitcointalk.org/index.php?topic=321228.0
 
@@ -71,7 +73,7 @@ MF: This was before timelocks?
 
 AG: They weren’t in the code or activated.
 
-BM: There was a [nLocktime](https://medium.com/summa-technology/bitcoins-time-locks-27e0c362d7a1) in the original Bitcoin. The [CSV soft fork](https://bitcoincore.org/en/2016/06/21/csv-softfork-instructions/) in 2016 added CheckLockTimeVerify and CheckSequenceVerify opcodes. That is what gave us HTLCs. The original timelock that was in Bitcoin didn’t behave in a way that anybody expected. It was not really very useful. 
+BM: There was a [nLocktime](https://medium.com/summa-technology/bitcoins-time-locks-27e0c362d7a1) in the original Bitcoin. The [CSV soft fork](https://bitcoincore.org/en/2016/06/21/csv-softfork-instructions/) in 2016 added CheckLockTimeVerify and CheckSequenceVerify opcodes. That is what gave us HTLCs. The original timelock that was in Bitcoin didn’t behave in a way that anybody expected. It was not really very useful.
 
 MF: This party Carol in the middle. There is no trust in Carol? What is the point of Carol if there is no trust required in Carol in this scheme?
 
@@ -83,7 +85,7 @@ MF: Towards the end of Greg’s post he gives the comparison to Coinjoin which i
 
 AG: Even if you just look at the introductory statements at the top of the diagram. Phase 1 “makes it so that if Bob gets paid there is no way for Carol to fail to get paid.” Of course there are such things as escrows with trust but I don’t think there is anything interesting here with regard to having trusted parties. This is about enforcing atomicity at the transaction level. The only reason it is different from a CLTV type construct is you have to use extra transactions in timelocks in the nLocktime as backouts. This isn’t about having a trusted relationship.
 
-# TierNolan scheme (2013)
+## TierNolan scheme (2013)
 
 https://bitcointalk.org/index.php?topic=193281.msg2224949#msg2224949
 
@@ -99,9 +101,9 @@ nothingmuch: If I am not mistaken the history is as follows. First there was the
 
 AG: That sounds good. Maybe it nicely illustrates that while it is natural to go down a historical route in this it might actually be better educationally to look at those two basic ideas. First we could mechanically state how an atomic swap construct works without any privacy concerns. Then we could describe as Greg laid out how you take that basic construct and you overlay a certain thing on it to make it work for privacy.
 
-# How does an atomic swap work?
+## How does an atomic swap work?
 
-AG: The basic idea of an atomic swap is this idea of a hash preimage, one side pays to a script that can only be spent out of by revealing a hash preimage. Two people are exchanging coins for whatever reason, cross blockchain or on the same blockchain, they are both able to extract two chunks of coins if they reveal the hash preimage. One of them starts with an advantage in that he knows the hash preimage. If you did it in a naive way he could claim the coins himself and then try to claim the other ones too. The basic idea of course is when you broadcast a transaction that reveals a hash preimage and the script says something like “Check that this data hashes to this previously agreed hash output.” Because you have to broadcast it in order to claim the coins that means that hash preimage by definition becomes public. A naive way to do it would be Alice has the hash preimage, tries to claim one of the outputs using the hash preimage and then Bob would see that hash preimage on the blockchain because it was published inside the scriptSig of the transaction that Alice uses to claim. He would take the hash preimage and essentially do the same thing. He would take that hash preimage and construct a valid scriptSig for the other output. He gets his one coin, they are both trying to claim one coin. The problem with that is it doesn’t have the security you want. Alice is in the preferential situation where she knows how to claim both the coins, she knows both of the hash preimages. You add another layer to it. You add that only one party can claim by adding the requirement of signing against a public key. Why do we need timeouts? If you had this setup as I described it where both sides would claim the coins if they know the preimage to a hash but also it was locked to one of their keys, it looks secure but they have a deadlock problem. If the first party refuses to reveal the hash preimage, the one that knows it, because you have had to deposit coins into these scripts the coins are locked up until that person decides to reveal it. Maybe they die or they disappear and then your money is dead. You do need a backout. The question becomes how does each side have a backout to ensure safety against the other party misbehaving. I haven’t explained that in full detail, I am sure we will at some point. How do we convert it into a private form? In talking about this you might find the diagram on Michael’s meetup page useful for this. We have got Alice and Carol and TX-0 and TX-1 on that diagram show Alice and Carol respectively funding a 2-of-2. Why do they fund a 2-of-2? Because they need to have joint control of the funds. 
+AG: The basic idea of an atomic swap is this idea of a hash preimage, one side pays to a script that can only be spent out of by revealing a hash preimage. Two people are exchanging coins for whatever reason, cross blockchain or on the same blockchain, they are both able to extract two chunks of coins if they reveal the hash preimage. One of them starts with an advantage in that he knows the hash preimage. If you did it in a naive way he could claim the coins himself and then try to claim the other ones too. The basic idea of course is when you broadcast a transaction that reveals a hash preimage and the script says something like “Check that this data hashes to this previously agreed hash output.” Because you have to broadcast it in order to claim the coins that means that hash preimage by definition becomes public. A naive way to do it would be Alice has the hash preimage, tries to claim one of the outputs using the hash preimage and then Bob would see that hash preimage on the blockchain because it was published inside the scriptSig of the transaction that Alice uses to claim. He would take the hash preimage and essentially do the same thing. He would take that hash preimage and construct a valid scriptSig for the other output. He gets his one coin, they are both trying to claim one coin. The problem with that is it doesn’t have the security you want. Alice is in the preferential situation where she knows how to claim both the coins, she knows both of the hash preimages. You add another layer to it. You add that only one party can claim by adding the requirement of signing against a public key. Why do we need timeouts? If you had this setup as I described it where both sides would claim the coins if they know the preimage to a hash but also it was locked to one of their keys, it looks secure but they have a deadlock problem. If the first party refuses to reveal the hash preimage, the one that knows it, because you have had to deposit coins into these scripts the coins are locked up until that person decides to reveal it. Maybe they die or they disappear and then your money is dead. You do need a backout. The question becomes how does each side have a backout to ensure safety against the other party misbehaving. I haven’t explained that in full detail, I am sure we will at some point. How do we convert it into a private form? In talking about this you might find the diagram on Michael’s meetup page useful for this. We have got Alice and Carol and TX-0 and TX-1 on that diagram show Alice and Carol respectively funding a 2-of-2. Why do they fund a 2-of-2? Because they need to have joint control of the funds.
 
 MF: One thing I saw going through these resources on atomic swaps, Sergio Demian Lerner had an attempt back in 2012 with a trustless exchange protocol called [P2PTradeX](https://bitcointalk.org/index.php?topic=91843.0). That was the idea that was refined and formalized by Tier Nolan in 2013. The guys at Decred worked on executing an atomic swap with Litecoin in 2017. Most of the activity seems to be swapping currencies between chains it seems until recently.
 
@@ -129,7 +131,7 @@ AG: That would be the answer. You can generalize this point to just custom scrip
 
 MF: We will go onto adaptor signatures, PTLCs and that kind of stuff later.
 
-# Alex Bosworth talk on submarine swaps at London Bitcoin Devs, 2019
+## Alex Bosworth talk on submarine swaps at London Bitcoin Devs, 2019
 
 https://diyhpl.us/wiki/transcripts/london-bitcoin-devs/2019-07-03-alex-bosworth-submarine-swaps/
 
@@ -147,7 +149,7 @@ MF: It felt like there was a lot more conversation going on around submarine swa
 
 AG: The public’s imagination was captured principally by the concept of an atomic swap, especially in the middle of the craze we experienced from 2016 to 2018. Partly because of all the altcoins and everybody got very excited about how you could trade trustlessly. Lightning exploded in some sense amongst a certain group of people between 2017 and 2018 when it went live on mainnet. Alex being the fountain of incredible ideas that he is, pushed this submarine swap idea. It is just another variant but it is a more complex variant of the things we are discussing here. It might make more sense to go atomic swap, CoinSwap and then talk about the more exotic things.
 
-# CoinSwapCS (2017)
+## CoinSwapCS (2017)
 
 https://github.com/AdamISZ/CoinSwapCS
 
@@ -165,13 +167,13 @@ MF: It is exactly the same concept.
 
 AG: Yeah.
 
-# Design for a CoinSwap implementation (Chris Belcher, 2020)
+## Design for a CoinSwap implementation (Chris Belcher, 2020)
 
-https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-May/017898.html
+https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-May/017898.html
 
 MF: This is Chris’ mailing list post from May of this year. There’s also the [gist](https://gist.github.com/chris-belcher/9144bd57a91c194e332fb5ca371d0964) with more details on the design. How does this proposal differs from your work Adam in 2017?
 
-AG: It wasn’t just me, many others were enthusiastic back then. How is this different to what goes before? It isn’t really. It is a fuller fleshing out of the key ideas. A couple of things that he has added into the mix. It is a long post and it has several ideas. Using ECDSA two party, what this means is because we need to use multisig but we don’t really want to use ordinary multisig. The thinking behind this is subtle. When you do a Coinjoin in the current form like Wasabi, Joinmarket, Samourai etc you are doing a completely non-steganographic protocol. In other words you are not hiding that you are doing the protocol which means that the anonymity set of the participants in this privacy protocol is transparently the set of participants at least at the pseudonym level that went in. The specific set of addresses that went into the protocol. When you try to move to a more steganographic hiding protocol, with something like CoinSwap specifically you are hoping to not make it obvious that you have done that. As has been discussed at great length in the context of Payjoin and other things there is a huge benefit if we can achieve the goal of having any one of these protocols be steganographic because it could share a huge anonymity set rather than a limited one. If you want to achieve that goal with CoinSwap the first step is to use an overlay contracting system such that the outputs in the cooperative case at least are not exposing things like hash preimages or other custom scripts. At the least you want the outputs to be let’s say 2-of-2 multisig. The reason he is mentioning and expounding on ECDSA two party, he is talking about specifically the [scheme](https://eprint.iacr.org/2017/552.pdf)  of Yehuda Lindell where you use somewhat exotic cryptography such as the [Paillier cryptosystem](https://en.wikipedia.org/wiki/Paillier_cryptosystem)  in order to achieve the goal of a 2-of-2 multisig inside a single ECDSA key. If you achieve that goal then you are going to create such a CoinSwap protocol in which all of the transactions at least at this level look like existing single ECDSA keys which is basically all the keys we have today apart from a few multisigs here and there. 
+AG: It wasn’t just me, many others were enthusiastic back then. How is this different to what goes before? It isn’t really. It is a fuller fleshing out of the key ideas. A couple of things that he has added into the mix. It is a long post and it has several ideas. Using ECDSA two party, what this means is because we need to use multisig but we don’t really want to use ordinary multisig. The thinking behind this is subtle. When you do a Coinjoin in the current form like Wasabi, Joinmarket, Samourai etc you are doing a completely non-steganographic protocol. In other words you are not hiding that you are doing the protocol which means that the anonymity set of the participants in this privacy protocol is transparently the set of participants at least at the pseudonym level that went in. The specific set of addresses that went into the protocol. When you try to move to a more steganographic hiding protocol, with something like CoinSwap specifically you are hoping to not make it obvious that you have done that. As has been discussed at great length in the context of Payjoin and other things there is a huge benefit if we can achieve the goal of having any one of these protocols be steganographic because it could share a huge anonymity set rather than a limited one. If you want to achieve that goal with CoinSwap the first step is to use an overlay contracting system such that the outputs in the cooperative case at least are not exposing things like hash preimages or other custom scripts. At the least you want the outputs to be let’s say 2-of-2 multisig. The reason he is mentioning and expounding on ECDSA two party, he is talking about specifically the [scheme](https://eprint.iacr.org/2017/552.pdf)  of Yehuda Lindell where you use somewhat exotic cryptography such as the [Paillier cryptosystem](https://en.wikipedia.org/wiki/Paillier_cryptosystem)  in order to achieve the goal of a 2-of-2 multisig inside a single ECDSA key. If you achieve that goal then you are going to create such a CoinSwap protocol in which all of the transactions at least at this level look like existing single ECDSA keys which is basically all the keys we have today apart from a few multisigs here and there.
 
 BM: I guess the things that have changed since 2013, first of all we got CSV, timelocks are way better. Secondly we got Lindell’s two party ECDSA protocol and the [multiparty ECDSA protocol](https://eprint.iacr.org/2018/987.pdf) which it doesn’t use Paillier, it uses ElGamal instead which is more compatible with …curves. Both are good for this, different security assumptions. The third thing which is I’m not sure is used here is adaptor signatures. We are going to talk about PTLCs in a minute. That hash preimage reveal is deanonymizing by itself. With adaptor signatures which you can do with both Schnorr and ECDSA you can reveal that preimage in a manner that only the recipient can find it.
 
@@ -181,7 +183,7 @@ BM: He doesn’t really talk about it all. It uses Lindell’s proposal.
 
 MF: This is to have a 2-of-2 multisig with only one signature going onchain before we get Schnorr. It is space savings onchain as well as the adaptor signature property of superior privacy, not having that script telling the world exactly what is going on.
 
-BM: That’s right. The price you pay for that is more rounds of communication between the sender and receiver. There are some zero knowledge proofs that need to communicated. I’m not sure what the count of the number of rounds is. It is at least three. For offchain payment protocols it is not that big a deal. If you look at MuSig and Schnorr you have a similar number of rounds in the protocol anyway because they have to decide upon the nonce for a group sourced Schnorr signature. 
+BM: That’s right. The price you pay for that is more rounds of communication between the sender and receiver. There are some zero knowledge proofs that need to communicated. I’m not sure what the count of the number of rounds is. It is at least three. For offchain payment protocols it is not that big a deal. If you look at MuSig and Schnorr you have a similar number of rounds in the protocol anyway because they have to decide upon the nonce for a group sourced Schnorr signature.
 
 nothingmuch: A [paper](https://sci-hub.tw/https://ieeexplore.ieee.org/abstract/document/7966968/) by Malte Moser and Rainer Bohme called “Anonymous Alone?” is an attempt to quantify these what they call second generation anonymity techniques on Bitcoin. It contains an interesting bit of data, an upper bound for how many CoinSwaps could be going on. It is only an upper bound under the assumption that multisigs that co-exist and are of a similar amount, coincide in time on the blockchain, any pair of those is potentially a CoinSwap. That is how they quantify the anonymity set. I think that that gives an intuition for all of the main ideas that Belcher proposed. This is the multiparty ECDSA stuff that makes the scripts less distinguishable. It is the introduction of routing which means that it is not necessarily a two party arrangement. And the splitting of amounts into multiple transactions so that the onchain amounts are decorrelated.
 
@@ -189,11 +191,11 @@ AG: Because of that paper they were making an assumption that multisig is going 
 
 nothingmuch: That paper tried to quantify how many users of privacy techniques are there. It addresses Coinjoins, stealth addresses and CoinSwaps. For CoinSwaps because the data is offchain all they can really do is give an upper bound how much CoinSwapping is occurring under some fairly strong assumptions. The first of these is that any CoinSwap is going to be anchored into two UTXOs that coincide in time that are either 2-of-2 or 2-of-3 and where the amounts are relatively close.
 
-BM: There is one aspect of all this which is a pet peeve of mine. Belcher’s example has Alice dividing 15 Bitcoin into 6 plus 7 plus 2. What we need to do in order to get this is we need to be doing binary decompositions of value. 16 million satoshis plus 8 million satoshis, using a binary decomposition you can get any value you want. Each set of binary decompositions becomes its own anonymity set. That’s the best you can possibly do as far as the anonymity set. But if everybody is dividing their value arbitrarily down to the satoshi you have a very strong fingerprint and a very strong ability to correlate. If I ask the question “How many pairs of outputs on the blockchain can I sum to get a third output on the blockchain?” Maybe these two are engaged in a CoinSwap. The ability to do that is still extremely strong. 
+BM: There is one aspect of all this which is a pet peeve of mine. Belcher’s example has Alice dividing 15 Bitcoin into 6 plus 7 plus 2. What we need to do in order to get this is we need to be doing binary decompositions of value. 16 million satoshis plus 8 million satoshis, using a binary decomposition you can get any value you want. Each set of binary decompositions becomes its own anonymity set. That’s the best you can possibly do as far as the anonymity set. But if everybody is dividing their value arbitrarily down to the satoshi you have a very strong fingerprint and a very strong ability to correlate. If I ask the question “How many pairs of outputs on the blockchain can I sum to get a third output on the blockchain?” Maybe these two are engaged in a CoinSwap. The ability to do that is still extremely strong.
 
 AG: That is a very good point. I would make the argument in the Joinmarket scenario it is not necessarily as easy as you might think because you tend to get a lot of false positives. But I think your fundamental point is almost certainly correct.
 
-nothingmuch: This is a bit of digression. I have been thinking about what I have been calling preferred value series. It generalizes to more than just binary but to any minimum Hamming weight amount, it could be decimal as well, it could be decimal with preferred value series. The intuition there is that if you have a smaller set of amounts that you can combine together to create arbitrary amounts then the likelihood that those amounts will have an anonymity set is much larger. The issues with that are if you need a UTXO for every significant bit in your amount, let’s say the average Hamming weight of an amount is 5 significant integers or something then you create a substantial overhead. We haven’t shared anything yet because as a group we haven’t come to consensus about that. For the unrelated stuff about Wabisabi and Coinjoins this is definitely the approach I have in mind and I am happy to share. Finally there is a way to make it practical without necessarily having that problem of this is 5x, 10x UTXO bloat factor. 
+nothingmuch: This is a bit of digression. I have been thinking about what I have been calling preferred value series. It generalizes to more than just binary but to any minimum Hamming weight amount, it could be decimal as well, it could be decimal with preferred value series. The intuition there is that if you have a smaller set of amounts that you can combine together to create arbitrary amounts then the likelihood that those amounts will have an anonymity set is much larger. The issues with that are if you need a UTXO for every significant bit in your amount, let’s say the average Hamming weight of an amount is 5 significant integers or something then you create a substantial overhead. We haven’t shared anything yet because as a group we haven’t come to consensus about that. For the unrelated stuff about Wabisabi and Coinjoins this is definitely the approach I have in mind and I am happy to share. Finally there is a way to make it practical without necessarily having that problem of this is 5x, 10x UTXO bloat factor.
 
 BM: There is definitely a bloat factor there. The way this is handled in traditional markets is if you try to buy certain kinds of stock you can only buy stocks in lots of hundred shares. On the foreign exchange markets in lots of hundred thousand dollars. I envision that if a trading market were to arise in this manner there would be a minimum lot size significantly larger than the dust limit. You are obviously not going to go down to satoshi because you can’t make a single satoshi output because you can’t spend it and it is below the dust limit. Something like 8 million satoshis, 16 million satoshis would probably end up being the minimum lot size and then you do binary decomposition above that.
 
@@ -207,17 +209,17 @@ nothingmuch: I don’t think that is robust because it is pretty easy to do modu
 
 MF: I am talking about the CoinSwap being the privacy technique. But let’s say you got the short straw, you’ve gone into the CoinSwap and you’ve got these “tainted” Bitcoin. You then need to get them untainted if you want to go into an exchange or you want to use a merchant that has restrictions on which Bitcoin they will accept.
 
-nothingmuch: That process of untainting, it works today just because the heuristics the exchanges use are very crude. They are only doing this as a cost saving measure to reduce liability anyway. If this becomes more common then all they have to do is slightly ramp up the computational difficulty of identifying these graphs of self spends or whatever. It is not a difficult problem to identify those because the subgraphs are disjoint. If there are no transactions connecting it to the rest of the transaction graph it is fairly easy to isolate. 
+nothingmuch: That process of untainting, it works today just because the heuristics the exchanges use are very crude. They are only doing this as a cost saving measure to reduce liability anyway. If this becomes more common then all they have to do is slightly ramp up the computational difficulty of identifying these graphs of self spends or whatever. It is not a difficult problem to identify those because the subgraphs are disjoint. If there are no transactions connecting it to the rest of the transaction graph it is fairly easy to isolate.
 
-MF: On the YouTube shinobius monk says “I demand an immediate in depth comment from everyone on how to deal with the timing issues of successive CoinSwaps hitting chain in short time period.” Filling up blocks with too many CoinSwaps? 
+MF: On the YouTube shinobius monk says “I demand an immediate in depth comment from everyone on how to deal with the timing issues of successive CoinSwaps hitting chain in short time period.” Filling up blocks with too many CoinSwaps?
 
 I think what he says is that CoinSwaps can be identified if they are hitting the chain in a very short period and maybe the amounts can be correlated. How do you know they are CoinSwaps? I don’t know, maybe there are ways to guess.
 
-AG: Is he talking about timing correlation? I think this relates back to something I was thinking we should definitely discuss which is what are the practicality issues around CoinSwap? I think people should take note of an interesting historical fact that in late 2013 Greg Maxwell made two very similar long Bitcointalk posts, one called [Coinjoin](https://bitcointalk.org/index.php?topic=279249.0) and one called [CoinSwap](https://bitcointalk.org/index.php?topic=321228). I think Coinjoin was implemented in some form or another within one month of the Coinjoin post but when I looked at it in early 2017, four years later, nobody had implemented CoinSwap at all. 
+AG: Is he talking about timing correlation? I think this relates back to something I was thinking we should definitely discuss which is what are the practicality issues around CoinSwap? I think people should take note of an interesting historical fact that in late 2013 Greg Maxwell made two very similar long Bitcointalk posts, one called [Coinjoin](https://bitcointalk.org/index.php?topic=279249.0) and one called [CoinSwap](https://bitcointalk.org/index.php?topic=321228). I think Coinjoin was implemented in some form or another within one month of the Coinjoin post but when I looked at it in early 2017, four years later, nobody had implemented CoinSwap at all.
 
 It is because there was a Coinjoin bounty.
 
-AG: I don’t think so. I think fundamentally CoinSwap is a more powerful protocol but there are some practicality issues that we should start discussing assuming that everyone on the call now understands what a CoinSwap is. 
+AG: I don’t think so. I think fundamentally CoinSwap is a more powerful protocol but there are some practicality issues that we should start discussing assuming that everyone on the call now understands what a CoinSwap is.
 
 MF: shinobius also says “You arguably don’t get atomicity in the sense of state guarantees across two different proof of work chains.” I’m assuming that it is due to re-orgs, I think that is his point there.
 
@@ -233,7 +235,7 @@ AG: We discussed in Payjoin the same dynamic.
 
 MF: Another question from shinobius. “Belcher’s idea of routing amounts through successive CoinSwaps and the impracticality of staggering the time between individual transactions in a chain of CoinSwaps for intervals that are too long.” This was a clarification for the previous question. Having too many successive CoinSwaps and staggering the time if there is an overlap between one CoinSwap that you are engaging in and the next CoinSwap.
 
-# Routing CoinSwaps
+## Routing CoinSwaps
 
 https://gist.github.com/chris-belcher/9144bd57a91c194e332fb5ca371d0964#routing-coinswaps-to-avoid-a-single-points-of-trust
 
@@ -241,7 +243,7 @@ MF: The problem that I understand routed CoinSwaps is addressing is if I do a Co
 
 I think we can believe that assumption is correct. It is more important to explore how that assumption changes other properties of CoinSwaps if it changes them at all. There is a problem with two party CoinSwaps because the other person learns the history. It might be a more interesting question to explore accepting the solution works. Does it ruin the user experience? Does it do something else other than merely fixing the problem? Is it harder to implement?
 
-AG: I haven’t thought about this much. I think Chris talked about some of the issues on the CoinSwapCS repo a couple of years ago. I remember him talking about this and multi-transaction. This addressing a privacy problem, it seems to me we are looking at exactly what we see on the Lightning Network. It is not exactly the same but it is almost exactly the same mechanic. We are going to have staggered timeouts to make sure that no party is every in a position where they could lose on both ends of the trade. It addresses a privacy problem in that same way where every participant in the route doesn’t know for sure the originator. 
+AG: I haven’t thought about this much. I think Chris talked about some of the issues on the CoinSwapCS repo a couple of years ago. I remember him talking about this and multi-transaction. This addressing a privacy problem, it seems to me we are looking at exactly what we see on the Lightning Network. It is not exactly the same but it is almost exactly the same mechanic. We are going to have staggered timeouts to make sure that no party is every in a position where they could lose on both ends of the trade. It addresses a privacy problem in that same way where every participant in the route doesn’t know for sure the originator.
 
 nothingmuch: I think it would be useful to go over the privacy issues with Lightning first as it stands today with HTLCs. If we assume that the routing is only a problem for CoinSwap makers much like the public Lightning graph is not considered to be a privacy issue. When you do a routed payment you are making a HTLC with the first party in the route and giving them an incentive to enter a HTLC with the next party. But along the entire path even though anonymity is guaranteed everybody shares the same secret. We mentioned it earlier, the PTLCs as a solution to this, also anonymous multihop locks and a bunch of other approaches. If I’m not mistaken Belcher doesn’t go into detail about how routing is supposed to work. The implication is that it uses adaptor signatures.
 
@@ -261,7 +263,7 @@ AG: I disagree. I don’t think it is fundamental that Alice is sending to Alice
 
 MF: A question on the YouTube from shinobius. “Isn’t the idea to just chain the transactions together without signing/submitting the first “funding” for the routed CoinSwap? That’s what I inferred from the proposal”
 
-AG: I think you guys must be right. The whole thing must be atomic. We are still in the situation where only in the cooperative case would we have proper privacy. Perhaps that reveals that we have extra fragility if we have multiple participants. You already have the concern when you do a single CoinSwap between two participants that if the other guy doesn’t respond in time you are going to have to publish onto the blockchain. It is going to be obvious you did a CoinSwap and you maybe didn’t want that. I am worried that if you have a lot of participants the potential for at least one party to drop out. That would just affect that hop? If you had four hops and the guy who is third along drops out and doesn’t respond then maybe two of the four hops end up broadcasting the hash to chain. 
+AG: I think you guys must be right. The whole thing must be atomic. We are still in the situation where only in the cooperative case would we have proper privacy. Perhaps that reveals that we have extra fragility if we have multiple participants. You already have the concern when you do a single CoinSwap between two participants that if the other guy doesn’t respond in time you are going to have to publish onto the blockchain. It is going to be obvious you did a CoinSwap and you maybe didn’t want that. I am worried that if you have a lot of participants the potential for at least one party to drop out. That would just affect that hop? If you had four hops and the guy who is third along drops out and doesn’t respond then maybe two of the four hops end up broadcasting the hash to chain.
 
 nothingmuch: The parties could in that case choose to still settle cooperatively but the entire route may learn. Suppose Alice sends to Bob who sends too Carol. Carol sends the final payment and then Carol defects and reveals the hashlock. This is what I mistakenly assumed earlier that Chris was relying on adaptor signature. In that case Bob will still learn where Alice’s funds went. Whereas in the optimal case Bob has no idea where the final payment is sent. He only knows that he is sending to Carol.
 
@@ -269,7 +271,7 @@ AG: Mentioning adaptor signatures makes a lot of sense because it does take away
 
 Ruben Somsen (RS): I believe that is possible. Lloyd’s work is specific to single signer ECDSA. You wouldn’t have the privacy that Belcher wants. Generally speaking my intuition would be if you have a multiparty protocol it will either be like Lightning where you have A depends on B depends on C. Or you are going to have the protocol that you wrote up, [Multiparty S6](https://joinmarket.me/blog/blog/multiparty-s6/). I think you’d need to use one of either in order to make it work. Belcher writes up a bunch of variations on how to do CoinSwaps.
 
-AG: It is either going to be a chain or it is going to be a big network all connected. That S6 thing, it is kind of a chain anyway. 
+AG: It is either going to be a chain or it is going to be a big network all connected. That S6 thing, it is kind of a chain anyway.
 
 RS: That would be a way to do adaptor signatures.
 
@@ -305,7 +307,7 @@ BM: The original proposal had four transactions. Alice swaps with Bob. Both Alic
 
 AG: I think you are talking about Succinct Atomic Swaps which is Ruben Somsen’s thing.
 
-# CoinSwap comparison with Succinct Atomic Swaps
+## CoinSwap comparison with Succinct Atomic Swaps
 
 https://gist.github.com/RubenSomsen/8853a66a64825716f51b409be528355f
 
@@ -315,13 +317,13 @@ BM: You are still going to have to exit onchain so we are still talking four tot
 
 RS: The point there is that it is another funding transaction. You go from funding transaction to funding transaction and you skip the settlement phase because you have full control over the UTXO and can start funding again. As long as you react before that timelock expires, before the refund transaction becomes valid you can direct the funds anywhere you want including another swap. That is the basic premise, if you have a server that does a lot of swapping or you want to swap a bunch of times then you do not have two transactions, you only have one transaction per swap. Succinct Atomic Swaps are a separate thing where you don’t have the timelock on one of the two outputs that you are swapping. That gives you some additional benefits because then that one doesn’t expire.
 
-BM: Worst case scenario there are four transactions per swap, best case scenario two transactions per atomic swap. 
+BM: Worst case scenario there are four transactions per swap, best case scenario two transactions per atomic swap.
 
 RS: The worst case is that your swap doesn’t go through. If your swap doesn’t go through it is four transactions.
 
 BM: I was really hoping this was doing swaps offchain.
 
-# CoinSwap comparison with Lightning
+## CoinSwap comparison with Lightning
 
 AG: That brings up the interesting question which is [raised](https://gist.github.com/chris-belcher/9144bd57a91c194e332fb5ca371d0964#how-are-coinswap-and-lightning-network-different) in the document which is how does this compare with Lightning? Shouldn’t we just use Lightning and he talks about several angles to that.
 
@@ -345,7 +347,7 @@ AG: It is a sliding scale really. It does yeah. You could do this entirely with 
 
 BM: Not necessarily. The 2P-ECDSA has multiple rounds of communication. That means you have to put your keys online too.
 
-nothingmuch: These differences are not fundamental though. It is a spectrum of design choices and implementation choices and a function of the adoption. I think it is difficult to speculate at our current vantage point in the present whether Lightning is going to have liquidity issues in two, three years time. 
+nothingmuch: These differences are not fundamental though. It is a spectrum of design choices and implementation choices and a function of the adoption. I think it is difficult to speculate at our current vantage point in the present whether Lightning is going to have liquidity issues in two, three years time.
 
 MF: If we are to move briefly onto submarine swaps, when you are swapping Bitcoin onchain for Bitcoin on Lightning then the liquidity issue really comes into play because you could expect it to be a large amount onchain and a smaller amount on Lightning yet if you are doing it for privacy reasons that amount needs to be the same. Amounts that make sense economically to be transferred onchain are not necessarily going to be the same amounts that are being transferred on Lightning.
 
@@ -355,9 +357,9 @@ MF: Ruben is discussing in the chat submarine swaps plus statechains. I don’t 
 
 RS: That’s a whole other topic, maybe next time.
 
-# Practicalities of implementing CoinSwap
+## Practicalities of implementing CoinSwap
 
-AG: Can we address the serious practical question, CoinSwaps are an idea, they are pretty old. What is going to be the motivation? I think we all agree that it could really improve fungibility and privacy. Whether Lightning is better than it or not is not really the issue because at the end of the day we have to do transactions onchain anyway. People might say “I don’t want to do a CoinSwap because I might get a dirty UTXO.” There is that and then it is a pain. You are going to sit around and wait 100 blocks? Nobody wants to wait 100 blocks to anything at all. 
+AG: Can we address the serious practical question, CoinSwaps are an idea, they are pretty old. What is going to be the motivation? I think we all agree that it could really improve fungibility and privacy. Whether Lightning is better than it or not is not really the issue because at the end of the day we have to do transactions onchain anyway. People might say “I don’t want to do a CoinSwap because I might get a dirty UTXO.” There is that and then it is a pain. You are going to sit around and wait 100 blocks? Nobody wants to wait 100 blocks to anything at all.
 
 MF: Where is that 100 blocks coming from?
 
@@ -371,7 +373,7 @@ MF: That incentive question sounds the same Joinmarket doesn’t it?
 
 AG: He mentions it in the document as I recall.
 
-I think that CoinSwaps have a lot of potential synergies with Coinjoins in the sense of a way to maintain individual anonymity post Coinjoin with those UTXOs as they fragment. Eventually you could hoover them back into a Coinjoin and repeat a synergistic cycle between the two. After a Coinjoin you have to be vigilant with that otherwise you undo the gains from the Coinjoin. 
+I think that CoinSwaps have a lot of potential synergies with Coinjoins in the sense of a way to maintain individual anonymity post Coinjoin with those UTXOs as they fragment. Eventually you could hoover them back into a Coinjoin and repeat a synergistic cycle between the two. After a Coinjoin you have to be vigilant with that otherwise you undo the gains from the Coinjoin.
 
 RS: I believe the change outputs in a Coinjoin have amounts that aren’t the same as everybody else’s. That becomes a tainted UTXO that you can’t spend together with your Coinjoined coins. Maybe for that change amount it would make sense to do a CoinSwap or something along those lines.
 
@@ -391,7 +393,7 @@ I think CoinSwaps on Coinjoins makes it much more practical because you don’t 
 
 BM: I agree. I think the answer is either or, it is both. I think the next interesting question what is the best way to combine these two? Can I make my commitment to a CoinSwap also be the input to a Coinjoin? Or the output from a Coinjoin be an input to a CoinSwap? I think that is the next iteration of this set of ideas that combines the best of both worlds.
 
-AG: I think an interesting model is the [CoinjoinXT](https://joinmarket.me/blog/blog/coinjoinxt/) thing, one of the things I had with it at that time when I was trying to figure out how do we address amount correlation across multiple transactions, I realized if you have a Lightning channel open as one of the endpoints… Think of a CoinjoinXT as a multi transaction Coinjoin. But it wouldn’t have to be a Lightning channel open, it could just as easily be a CoinSwap. 
+AG: I think an interesting model is the [CoinjoinXT](https://joinmarket.me/blog/blog/coinjoinxt/) thing, one of the things I had with it at that time when I was trying to figure out how do we address amount correlation across multiple transactions, I realized if you have a Lightning channel open as one of the endpoints… Think of a CoinjoinXT as a multi transaction Coinjoin. But it wouldn’t have to be a Lightning channel open, it could just as easily be a CoinSwap.
 
 BM: I guess there are three concepts here. You’ve got Coinjoins, CoinSwaps and Lightning channel opens and closes. In principle any of those three could be any of those other three. The output of a Coinjoin could be a Lightning opening, it could be a CoinSwap. I should be able to compose these things. The extent to which we are successful in creating a protocol which naturally composes those three things and picks which one is best for the circumstance and increases the anonymity set of all three while decreasing the taint of all three as well, that is the ideal case.
 
@@ -401,9 +403,9 @@ BM: We already have Coinjoin and Lightning.
 
 RS: I like the argument of Coinjoining first and then using the result in a CoinSwap. That seems pretty good in the sense that you do have some anonymity already. Whoever receives that UTXO is not going to receive a fully tainted UTXO, it is already mixed with other Coinjoins.
 
-nothingmuch: For completeness, submarine swaps also bridge the gap. That pertains to Adam’s point about CoinjoinXT. You can effectively have a Coinjoin transaction where one of the outputs is a submarine swap that moves some of the balance into a Lightning channel just like you can have a CoinSwap transaction either funded or settled through a Coinjoin. An interesting [post](https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-June/017970.html) from the Bitcoin dev mailing list recently is about batched CoinSwaps where you have a single counterparty as a maker servicing multiple takers’ CoinSwaps simultaneously which again blurs the boundary between Coinjoins and CoinSwaps.
+nothingmuch: For completeness, submarine swaps also bridge the gap. That pertains to Adam’s point about CoinjoinXT. You can effectively have a Coinjoin transaction where one of the outputs is a submarine swap that moves some of the balance into a Lightning channel just like you can have a CoinSwap transaction either funded or settled through a Coinjoin. An interesting [post](https://gnusha.org/url/https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2020-June/017970.html) from the Bitcoin dev mailing list recently is about batched CoinSwaps where you have a single counterparty as a maker servicing multiple takers’ CoinSwaps simultaneously which again blurs the boundary between Coinjoins and CoinSwaps.
 
-# Succinct Atomic Swaps
+## Succinct Atomic Swaps
 
 https://gist.github.com/RubenSomsen/c9f0a92493e06b0e29acced61ca9f49a
 
@@ -423,7 +425,7 @@ RS: It would be like closing your Lightning channel. You could choose to close y
 
 AG: I think nothingmuch’s point is important there. Because there is a punishment mechanism there is a game theoretic aspect to a Lightning channel that doesn’t exist in a pure atomic swap or CoinSwap.
 
-MF: That’s because you are keeping your channel open for a long period of time. In a swap you are just doing one swap, you are not opening a swap channel. 
+MF: That’s because you are keeping your channel open for a long period of time. In a swap you are just doing one swap, you are not opening a swap channel.
 
 AG: There aren’t multiple states. The whole idea with that offchain protocol you have to overwrite a previous state without going to the blockchain. You use a punishment mechanism. With CoinSwap we just use the blockchain always.
 
@@ -439,7 +441,7 @@ RS: I think it is already outdated because there is this other [paper](https://g
 
 AG: Yeah because usually we have to symmetrically fund these two multisigs.
 
-# Externally Funded Succinct Atomic Swaps (Max Hillebrand)
+## Externally Funded Succinct Atomic Swaps (Max Hillebrand)
 
 https://github.com/MaxHillebrand/research/blob/master/ExternallyFundedSuccinctAtomicSwaps.md
 
@@ -461,7 +463,7 @@ MH: In the case of the exchange yes you might figure it out. But it will change 
 
 MF: You mean a problem for this third party, this privacy expert?
 
-MH: I think it is mainly a problem for the swap partner. 
+MH: I think it is mainly a problem for the swap partner.
 
 RS: One thing I am thinking is you can cancel the swap if you are not satisfied with the amount. Then before you are satisfied with the amount maybe you can do some kind of additional Lightning payment. It makes it more complex when you require the Lightning Network. A Lightning payment if the amount is not exactly what you were expecting. There is a little bit of a trust factor there. Or you can make it so that the Lightning payment only goes through if the swap goes through. That should be possible I think. That also relies on a secret. Maybe you can solve it like that but obviously you get a lot of overhead trying to utilize the Lightning Network while doing a swap. That may be not be very practical but that would be one way of doing it.
 
@@ -471,6 +473,6 @@ RS: To very briefly summarize, the idea is to allow somebody to make a payment a
 
 MH: Making a payment in this scheme as a user of that coin was just swapped is basically closing the channel in the cooperative closing transaction. And what someone could do potentially, I am still not sure, is to do splicing. You close the channel in the input and then you open a channel again in the output of a transaction. Even better maybe would be to swap some balances. If the user has two channels open to the server, one smaller and one larger, then the user could swap the value of the smaller channel into the larger channel with an atomic swap, a Lightning Network channel update, and then close the smaller channel. In a way that there is no change. As soon as the server and client are online and can communicate I think they can negotiate nice swapping ceremonies.
 
-RS: I believe it is theoretically possible. 
+RS: I believe it is theoretically possible.
 
 MH: The very nice thing with 2P-ECDSA and adaptor signature ECDSA is that this all looks like single public keys and nothing else in the cooperative case. This is fantastic.

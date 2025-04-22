@@ -1,16 +1,13 @@
 ---
-title: Btcpay
+title: How to make everyone run their own full node
 transcript_by: Bryan Bishop
-categories: ['conference']
-tags: ['security', 'privacy', 'wallet']
-speakers: ['Nicolas Dorier']
+tags:
+  - security
+speakers:
+  - Nicolas Dorier
 date: 2018-07-03
+media: https://www.youtube.com/watch?v=0UiMhpz9eLA
 ---
-
-How to make everyone run their own full node
-
-Building on Bitcoin, 2018
-
 <https://twitter.com/kanzure/status/1014166857958461440>
 
 I am the maintainer of Nbitcoin and btcpay. I am a dot net fanboy. I am happy that the number of people working on bitcoin in C# has spread from one about four years ago to about ten in this room toay. That's great. I work at DG Lab in Japan.
@@ -53,7 +50,7 @@ Since btcpay uses the same API as bitpay, I was able to fork a lot of bitpay plu
 
 NBXplorer was made at DG Labs originally for Elements. I asked them if it could be open-source and they said yes. It's a simple REST API. It doesn't index, it just tracks your own key.
 
-I am using docker-compose to facilitate this. My second task was to integrate lightning, including c-lightning and lightning charge. I am also working on lnd integration. Zap Wallet is a good desktop wallet for lightning. 
+I am using docker-compose to facilitate this. My second task was to integrate lightning, including c-lightning and lightning charge. I am also working on lnd integration. Zap Wallet is a good desktop wallet for lightning.
 
 One downside is that you can't run lightning on a pruned bitcoin node. And also, docker installation on custom hosting is like $10/mo. If we used pruned nodes with lightning then it could bring the cost down to $5/month. And the downside is that the user needs to search for the hosts and run btcpay-install.sh to install and use this btcpay replacement.
 

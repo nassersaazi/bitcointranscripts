@@ -1,12 +1,13 @@
 ---
 title: Fungibility And Scalability
 transcript_by: Bryan Bishop
-categories: ['conference']
-tags: ['mining', 'privacy', 'fungibility']
-speakers: ['Adam Back']
+tags:
+  - privacy-enhancements
+speakers:
+  - Adam Back
+date: 2015-12-06
 media: https://youtube.com/watch?v=aQ1--w4uEMM&t=2443
 ---
-
 slides: <https://scalingbitcoin.org/hongkong2015/presentations/DAY1/1_overviews_2_back.pdf>
 
 I think everyone knows what fungibility is, it's when coins are equal and interchangeable. It's an important property for an electronic cash system. All bitcoin users would have a problem if fungability goes away.
@@ -17,7 +18,7 @@ The types of privacy that people might be interested are things like linkability
 
 One of the main kind of point I wanted to make in this presentation was about the positive as well as negative aspects of introducing fungibility mechanisms. Typically we have seen fungibility mechanisms that they increase the number of transactions or they increase the size of transactions, zerocoin transactions for instance are 30 kilobytes or thereabout, and some of the mechanisms increase the UTXO as a side effect, which is undesirable for node size or scalability and stuff.
 
-The observation to make is that some of the more advanced fungibility mechanisms can actually reduce the number of transactions and potentially reduce the UTXO size. The obvious thing to do is that for a simple fungibility is a reusable address. It slightly obscures who's paying who, at least compared to a single fully used address. Partly it..... 
+The observation to make is that some of the more advanced fungibility mechanisms can actually reduce the number of transactions and potentially reduce the UTXO size. The obvious thing to do is that for a simple fungibility is a reusable address. It slightly obscures who's paying who, at least compared to a single fully used address. Partly it.....
 
 Often when you are using a smartphone wallet, bloom filters are not privacy-preserving. That defense is weak at the moment. It creates more addresses, increases the number of transactions, increases the size of transactions. You combine fragmented values from the wallet. Will also increase UTXO size because users will have more unseptns as result of fragmentation. It's moderately effective at best. Academics have analyzed the network and shown the effectiveness of this approach is a little weak.
 

@@ -1,13 +1,9 @@
 ---
 title: Intro to W3C standards
 transcript_by: Bryan Bishop
-categories: ['workshop']
-tags: ['consensus']
-speakers: ['Wendy Seltzer']
+speakers:
+  - Wendy Seltzer
 ---
-
-08:45–09:00 - Keynote: “Intro to W3C standards” Wendy Seltzer, W3C.
-
 https://goo.gl/3ZqAuo
 
 We are working to make a web that is global and nteroperable and usable by everyone. If you have tech that you want to work on a global working basis, and distributed manner, then the web is the platform on which to do that. W3C is the consortium and standards body that works to help keep the web open and available. We don't have police power, ew don't have police power to compel web standards, we build consensu sthrough W3C process and our open royalty-free patent policy to invite people to work together.
@@ -24,7 +20,7 @@ So I wanted to briefly mention some of the work that the W3C is already doing th
 
 Web authentication is one of the newer pieces of work that came over that came over to W3C from Fido Alliance. Username and password is a terrible way to auhtenticate, yet it's done everywhere on the web. HOw can we get beyond that? The web authenticaiton working group is building the web APIs to act as the interface between the local authenticator, the web client, and the reliant party, the big arrow between your local client which might be a web browser on a client, and the website which is relying party. This will be one module of a larger authorization framework that we are building a way to do strong authentication from the web client.
 
-Another piece of work is PKLjs. It's in the candidate recommendation stage, the Web Crypto API. Instead of inviting every web developer to write his or her own javascript crypto libraries, we're building an API standard across the browsers, rather than, building the implementation, we're standardizing what that API looks like so that a call to encrypt or decrypt, or verify, 
+Another piece of work is PKLjs. It's in the candidate recommendation stage, the Web Crypto API. Instead of inviting every web developer to write his or her own javascript crypto libraries, we're building an API standard across the browsers, rather than, building the implementation, we're standardizing what that API looks like so that a call to encrypt or decrypt, or verify,
 
 This is something that a ... move forward to a recommendation, but the API is extensible and if there are additional algorithms needed, then this is a good place to build for those. Lots of work in our WebAppSec working group. If you're building web applications and want to assure that others are not injecting cross-site scripting attacks (XSS) and data theft attacks, and various APIs design in WebAppSec help to secure web applications, make it easier for the authors of webapps to deploy securely and rely on the transport layer security of HTTPS. And places to think about if you're developing applications in the browser, looking into webappsec APIs and designs.
 

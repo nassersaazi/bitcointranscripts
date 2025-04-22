@@ -1,10 +1,9 @@
 ---
 title: Keynote
 transcript_by: Bryan Bishop
-categories: ['conference']
-speakers: ['Charlie Lee']
+speakers:
+  - Charlie Lee
 ---
-
 It has been a while since I have been back to MIT. So. So um. Yeah, it's. I got extremely excited that the expo is at 26100. This was one of my favorite classrooms. Almost 20 years ago, I took 1802 with Professor Rogers. Yeah. I hope I am not as boring as he was back then.
 
 Another thing I remember about this classroom is that we watched a lot of LS movies. Does LCE still suck? Um, yeah. I definitely did not expect back then to come back and give a talk. So I am extremely honored.
@@ -83,7 +82,7 @@ Q: Are there any ways to stop the fees from going higher?
 
 A: Decentralization costs more. It is more efficient to run a centralized system. To have everyone keep track of the blockchain is expensive. I think that fees will have to go up. There's only so much you can increase the block size by, at some point people are ust doing a lot of work for very little money. So the economics have to make sense. The fees have to go up.
 
-Q: 
+Q:
 
 A: It is not that related to the difficulty for miners. That's controlled by how many people are mining (WRONG- it's the hashrate, not people). Difficulty will go down.
 

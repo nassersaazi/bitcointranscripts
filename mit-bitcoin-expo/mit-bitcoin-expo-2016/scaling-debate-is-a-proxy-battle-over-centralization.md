@@ -1,11 +1,9 @@
 ---
 title: Scaling Debate Is A Proxy Battle Over Centralization
 transcript_by: Bryan Bishop
-categories: ['conference']
-tags: ['consensus']
-speakers: ["James D'Angelo"]
+speakers:
+  - James D'Angelo
 ---
-
 I really appreciated the fact that.... I really appreciated Cory's talk. I quoted someone in my talk. It was a fairly recent quote. His whole talk was speaking about governance. There's a lot of governing issues coming into Bitcoin. We like the solving the whole world with technical.
 
 The word that I am fascinated with is the one highlighted here, the word "consensus". I'm just going to reach out to you guys. Does anyone want to make a stand at telling me what consensus means? Agree? I like that. It's important that we understand consensus. People say that it's decentralized consensus. The idea of no one entity controlling it.
@@ -84,7 +82,7 @@ James: We need to... we should not make a Bitcoin congress with 1000 individuals
 
 Q: I am new to Bitcoin. I am from China. I would like to ask, what percentage of Bitcoin is mining in the United States? Since you assume that China has been colluding, and that it's a large community, then what about the United States?
 
-James: Like the USSR vs the US and we will both make enormous missiles? So maybe the US would buy equally? We don't know those numbers. We don't know who's mining where. We don't know if the American miners are controlled by the Chinese. You cannot decentralize hardware. You can decentralize people, not hardware. 
+James: Like the USSR vs the US and we will both make enormous missiles? So maybe the US would buy equally? We don't know those numbers. We don't know who's mining where. We don't know if the American miners are controlled by the Chinese. You cannot decentralize hardware. You can decentralize people, not hardware.
 
 Why are people not hardware?
 

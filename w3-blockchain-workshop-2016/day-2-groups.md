@@ -1,9 +1,7 @@
 ---
 title: Day 2 Groups
 transcript_by: Bryan Bishop
-categories: ['workshop']
 ---
-
 # Browsers
 
 One was creating a new API or updating an existing API for Web Auth or an expansion to the web auth spec, where the browser would understand blockchain-based identity. We want to resolve and display blockchain identity in the browser, anything identified as an identity in a blockchain in a browser. Request payload signature. Apps receiving payloads could check from the user. Those are the four areas we are interested in pursuing for standards.
@@ -24,7 +22,7 @@ Q: Is any of that up on the board?
 
 A: Shortly.
 
-Q: Pagerank for transactions? 
+Q: Pagerank for transactions?
 
 A: It's a notion of centrality of the transaction. In blockchain, a transaction has a connection, we can calculate centralities up to the second depth, connected to the weighted address, we can add more weight that can be part of the address, and we can calculate the size and amount and distance from the genesis block. Ratio of changes of amounts. This can be a calculated effect. We don't know who own the addresses, and the auditor or regulator are able to screen which address has importancy and we are- that is my thinking.
 

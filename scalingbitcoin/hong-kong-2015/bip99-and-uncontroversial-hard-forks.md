@@ -1,12 +1,12 @@
 ---
 title: Bip99 And Uncontroversial Hard Forks
 transcript_by: Bryan Bishop
-categories: ['conference']
-tags: ['consensus', 'forks']
-speakers: ['Jorge Timón']
+tags:
+  - soft-fork-activation
+speakers:
+  - Jorge Timón
 media: https://youtube.com/watch?v=aQ1--w4uEMM&t=1121
 ---
-
 slides: <https://scalingbitcoin.org/hongkong2015/presentations/DAY1/1_overview_1_timon.pdf>
 
 bip99 <https://github.com/bitcoin/bips/blob/master/bip-0099.mediawiki>
@@ -45,7 +45,7 @@ A controversial soft-fork is where miners decide to collude between themselves, 
 
 There are controversial hard-fork proposals. We will see some examples if I have time. The point here is that we don't care about miners here because if we have something controversial, some miners might be opposed, then we don't want use any miner upgrade confirmation mechanism because we can just use a time threshold and that's it.
 
-A schism hard-fork is like going to war, and we don't want to kill civilians or anything, we don't want to hurt bystanders that don't know what's going on. A way to do that is to start the controversial hard-fork is by..... 
+A schism hard-fork is like going to war, and we don't want to kill civilians or anything, we don't want to hurt bystanders that don't know what's going on. A way to do that is to start the controversial hard-fork is by.....
 
 (inaudible / stream problems)
 

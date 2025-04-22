@@ -1,11 +1,9 @@
 ---
 title: Smart Signatures
 transcript_by: Bryan Bishop
-categories: ['workshop']
-tags: ['multisig']
-speakers: ['Christopher Allen']
+speakers:
+  - Christopher Allen
 ---
-
 Christopher Allen
 
 Smart signatures and smarter signatures
